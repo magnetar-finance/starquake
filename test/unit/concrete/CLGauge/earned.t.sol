@@ -44,14 +44,13 @@ contract EarnedTest is CLGaugeTest {
     }
 
     function test_EarnedOneDepositorWithPositionInCurrentPrice() public {
-        uint256 tokenId =
-            nftCallee.mintNewCustomRangePositionForUserWith60TickSpacing(
-                TOKEN_1,
-                TOKEN_1,
-                -TICK_SPACING_60,
-                TICK_SPACING_60,
-                users.alice
-            );
+        uint256 tokenId = nftCallee.mintNewCustomRangePositionForUserWith60TickSpacing(
+            TOKEN_1,
+            TOKEN_1,
+            -TICK_SPACING_60,
+            TICK_SPACING_60,
+            users.alice
+        );
 
         nft.approve(address(gauge), tokenId);
         gauge.deposit(tokenId);
@@ -72,14 +71,13 @@ contract EarnedTest is CLGaugeTest {
     }
 
     function test_EarnedOneDepositorWithPositionRightOfCurrentPrice() public {
-        uint256 tokenId =
-            nftCallee.mintNewCustomRangePositionForUserWith60TickSpacing(
-                TOKEN_1,
-                TOKEN_1,
-                TICK_SPACING_60,
-                2 * TICK_SPACING_60,
-                users.alice
-            );
+        uint256 tokenId = nftCallee.mintNewCustomRangePositionForUserWith60TickSpacing(
+            TOKEN_1,
+            TOKEN_1,
+            TICK_SPACING_60,
+            2 * TICK_SPACING_60,
+            users.alice
+        );
 
         nft.approve(address(gauge), tokenId);
         gauge.deposit(tokenId);
@@ -100,14 +98,13 @@ contract EarnedTest is CLGaugeTest {
     }
 
     function test_EarnedOneDepositorWithPositionLeftOfCurrentPrice() public {
-        uint256 tokenId =
-            nftCallee.mintNewCustomRangePositionForUserWith60TickSpacing(
-                TOKEN_1,
-                TOKEN_1,
-                2 * -TICK_SPACING_60,
-                -TICK_SPACING_60,
-                users.alice
-            );
+        uint256 tokenId = nftCallee.mintNewCustomRangePositionForUserWith60TickSpacing(
+            TOKEN_1,
+            TOKEN_1,
+            2 * -TICK_SPACING_60,
+            -TICK_SPACING_60,
+            users.alice
+        );
 
         nft.approve(address(gauge), tokenId);
         gauge.deposit(tokenId);
@@ -128,14 +125,13 @@ contract EarnedTest is CLGaugeTest {
     }
 
     function test_EarnedWithStaggeredDepositsAndWithdrawalsWithIntermediateClaims() public {
-        uint256 aliceTokenId =
-            nftCallee.mintNewCustomRangePositionForUserWith60TickSpacing(
-                TOKEN_1,
-                TOKEN_1,
-                -TICK_SPACING_60,
-                TICK_SPACING_60,
-                users.alice
-            );
+        uint256 aliceTokenId = nftCallee.mintNewCustomRangePositionForUserWith60TickSpacing(
+            TOKEN_1,
+            TOKEN_1,
+            -TICK_SPACING_60,
+            TICK_SPACING_60,
+            users.alice
+        );
 
         nft.approve(address(gauge), aliceTokenId);
         gauge.deposit(aliceTokenId);
@@ -153,14 +149,13 @@ contract EarnedTest is CLGaugeTest {
         vm.startPrank(users.alice);
         gauge.getReward(aliceTokenId);
 
-        uint256 bobTokenId =
-            nftCallee.mintNewCustomRangePositionForUserWith60TickSpacing(
-                TOKEN_1,
-                TOKEN_1,
-                -TICK_SPACING_60,
-                TICK_SPACING_60,
-                users.bob
-            );
+        uint256 bobTokenId = nftCallee.mintNewCustomRangePositionForUserWith60TickSpacing(
+            TOKEN_1,
+            TOKEN_1,
+            -TICK_SPACING_60,
+            TICK_SPACING_60,
+            users.bob
+        );
 
         vm.startPrank(users.bob);
 
@@ -237,26 +232,24 @@ contract EarnedTest is CLGaugeTest {
     }
 
     function test_EarnedWithLateRewards() public {
-        uint256 aliceTokenId =
-            nftCallee.mintNewCustomRangePositionForUserWith60TickSpacing(
-                TOKEN_1,
-                TOKEN_1,
-                -TICK_SPACING_60,
-                TICK_SPACING_60,
-                users.alice
-            );
+        uint256 aliceTokenId = nftCallee.mintNewCustomRangePositionForUserWith60TickSpacing(
+            TOKEN_1,
+            TOKEN_1,
+            -TICK_SPACING_60,
+            TICK_SPACING_60,
+            users.alice
+        );
 
         nft.approve(address(gauge), aliceTokenId);
         gauge.deposit(aliceTokenId);
 
-        uint256 bobTokenId =
-            nftCallee.mintNewCustomRangePositionForUserWith60TickSpacing(
-                TOKEN_1,
-                TOKEN_1,
-                -TICK_SPACING_60,
-                TICK_SPACING_60,
-                users.bob
-            );
+        uint256 bobTokenId = nftCallee.mintNewCustomRangePositionForUserWith60TickSpacing(
+            TOKEN_1,
+            TOKEN_1,
+            -TICK_SPACING_60,
+            TICK_SPACING_60,
+            users.bob
+        );
 
         vm.startPrank(users.bob);
 
@@ -296,26 +289,24 @@ contract EarnedTest is CLGaugeTest {
     }
 
     function test_EarnedWithNonOverlappingRewards() public {
-        uint256 aliceTokenId =
-            nftCallee.mintNewCustomRangePositionForUserWith60TickSpacing(
-                TOKEN_1,
-                TOKEN_1,
-                -TICK_SPACING_60,
-                TICK_SPACING_60,
-                users.alice
-            );
+        uint256 aliceTokenId = nftCallee.mintNewCustomRangePositionForUserWith60TickSpacing(
+            TOKEN_1,
+            TOKEN_1,
+            -TICK_SPACING_60,
+            TICK_SPACING_60,
+            users.alice
+        );
 
         nft.approve(address(gauge), aliceTokenId);
         gauge.deposit(aliceTokenId);
 
-        uint256 bobTokenId =
-            nftCallee.mintNewCustomRangePositionForUserWith60TickSpacing(
-                TOKEN_1,
-                TOKEN_1,
-                -TICK_SPACING_60,
-                TICK_SPACING_60,
-                users.bob
-            );
+        uint256 bobTokenId = nftCallee.mintNewCustomRangePositionForUserWith60TickSpacing(
+            TOKEN_1,
+            TOKEN_1,
+            -TICK_SPACING_60,
+            TICK_SPACING_60,
+            users.bob
+        );
 
         vm.startPrank(users.bob);
 
@@ -354,22 +345,20 @@ contract EarnedTest is CLGaugeTest {
     function test_EarnedWithLaggedStaking() public {
         uint256 reward = TOKEN_1;
 
-        uint256 aliceTokenId =
-            nftCallee.mintNewCustomRangePositionForUserWith60TickSpacing(
-                TOKEN_1,
-                TOKEN_1,
-                -TICK_SPACING_60,
-                TICK_SPACING_60,
-                users.alice
-            );
-        uint256 bobTokenId =
-            nftCallee.mintNewCustomRangePositionForUserWith60TickSpacing(
-                TOKEN_1,
-                TOKEN_1,
-                -TICK_SPACING_60,
-                TICK_SPACING_60,
-                users.bob
-            );
+        uint256 aliceTokenId = nftCallee.mintNewCustomRangePositionForUserWith60TickSpacing(
+            TOKEN_1,
+            TOKEN_1,
+            -TICK_SPACING_60,
+            TICK_SPACING_60,
+            users.alice
+        );
+        uint256 bobTokenId = nftCallee.mintNewCustomRangePositionForUserWith60TickSpacing(
+            TOKEN_1,
+            TOKEN_1,
+            -TICK_SPACING_60,
+            TICK_SPACING_60,
+            users.bob
+        );
 
         addRewardToGauge(address(voter), address(gauge), reward);
 

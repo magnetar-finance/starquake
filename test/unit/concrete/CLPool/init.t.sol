@@ -6,13 +6,12 @@ import {CLPoolTest} from './CLPool.t.sol';
 
 contract InitTest is CLPoolTest {
     function test_RevertIf_AlreadyInitialized() public {
-        address pool =
-            poolFactory.createPool({
-                tokenA: TEST_TOKEN_0,
-                tokenB: TEST_TOKEN_1,
-                tickSpacing: TICK_SPACING_LOW,
-                sqrtPriceX96: encodePriceSqrt(1, 1)
-            });
+        address pool = poolFactory.createPool({
+            tokenA: TEST_TOKEN_0,
+            tokenB: TEST_TOKEN_1,
+            tickSpacing: TICK_SPACING_LOW,
+            sqrtPriceX96: encodePriceSqrt(1, 1)
+        });
 
         vm.expectRevert();
         ICLPool(pool).initialize({

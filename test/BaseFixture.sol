@@ -5,10 +5,7 @@ import 'forge-std/Test.sol';
 import {CLFactory} from 'contracts/core/CLFactory.sol';
 import {ICLPool, CLPool} from 'contracts/core/CLPool.sol';
 import {NonfungibleTokenPositionDescriptor} from 'contracts/periphery/NonfungibleTokenPositionDescriptor.sol';
-import {
-    INonfungiblePositionManager,
-    NonfungiblePositionManager
-} from 'contracts/periphery/NonfungiblePositionManager.sol';
+import {INonfungiblePositionManager, NonfungiblePositionManager} from 'contracts/periphery/NonfungiblePositionManager.sol';
 import {CLGaugeFactory} from 'contracts/gauge/CLGaugeFactory.sol';
 import {CLGauge} from 'contracts/gauge/CLGauge.sol';
 import {MockWETH} from 'contracts/test/MockWETH.sol';
@@ -181,11 +178,7 @@ abstract contract BaseFixture is Test, Constants, Events, PoolUtils {
     }
 
     /// @dev Helper function to add rewards to gauge from voter
-    function addRewardToGauge(
-        address _voter,
-        address _gauge,
-        uint256 _amount
-    ) internal {
+    function addRewardToGauge(address _voter, address _gauge, uint256 _amount) internal {
         deal(address(rewardToken), _voter, _amount);
         vm.startPrank(_voter);
         // do not overwrite approvals if already set

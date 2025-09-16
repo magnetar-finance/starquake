@@ -17,14 +17,13 @@ contract SetCustomSwapFeeTest is CustomSwapFeeModuleTest {
     }
 
     function test_RevertIf_FeeTooHigh() public {
-        address pool =
-            createAndCheckPool({
-                factory: poolFactory,
-                token0: TEST_TOKEN_0,
-                token1: TEST_TOKEN_1,
-                tickSpacing: TICK_SPACING_LOW,
-                sqrtPriceX96: encodePriceSqrt(1, 1)
-            });
+        address pool = createAndCheckPool({
+            factory: poolFactory,
+            token0: TEST_TOKEN_0,
+            token1: TEST_TOKEN_1,
+            tickSpacing: TICK_SPACING_LOW,
+            sqrtPriceX96: encodePriceSqrt(1, 1)
+        });
 
         vm.expectRevert();
         customSwapFeeModule.setCustomFee({pool: pool, fee: 30_001});
@@ -36,14 +35,13 @@ contract SetCustomSwapFeeTest is CustomSwapFeeModuleTest {
     }
 
     function test_SetCustomFee() public {
-        address pool =
-            createAndCheckPool({
-                factory: poolFactory,
-                token0: TEST_TOKEN_0,
-                token1: TEST_TOKEN_1,
-                tickSpacing: TICK_SPACING_LOW,
-                sqrtPriceX96: encodePriceSqrt(1, 1)
-            });
+        address pool = createAndCheckPool({
+            factory: poolFactory,
+            token0: TEST_TOKEN_0,
+            token1: TEST_TOKEN_1,
+            tickSpacing: TICK_SPACING_LOW,
+            sqrtPriceX96: encodePriceSqrt(1, 1)
+        });
 
         vm.expectEmit(true, true, false, false, address(customSwapFeeModule));
         emit SetCustomFee({pool: pool, fee: 5_000});
@@ -73,14 +71,13 @@ contract SetCustomSwapFeeTest is CustomSwapFeeModuleTest {
     }
 
     function test_CannotExceedMaxSwapFee() public {
-        address pool =
-            createAndCheckPool({
-                factory: poolFactory,
-                token0: TEST_TOKEN_0,
-                token1: TEST_TOKEN_1,
-                tickSpacing: TICK_SPACING_LOW,
-                sqrtPriceX96: encodePriceSqrt(1, 1)
-            });
+        address pool = createAndCheckPool({
+            factory: poolFactory,
+            token0: TEST_TOKEN_0,
+            token1: TEST_TOKEN_1,
+            tickSpacing: TICK_SPACING_LOW,
+            sqrtPriceX96: encodePriceSqrt(1, 1)
+        });
         uint24 initialFee = poolFactory.getSwapFee(pool);
         uint24 maxFee = 100_000;
 

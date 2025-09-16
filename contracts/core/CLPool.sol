@@ -202,8 +202,9 @@ contract CLPool is ICLPool {
     /// @dev This function is gas optimized to avoid a redundant extcodesize check in addition to the returndatasize
     /// check
     function balance0() private view returns (uint256) {
-        (bool success, bytes memory data) =
-            token0.staticcall(abi.encodeWithSelector(IERC20Minimal.balanceOf.selector, address(this)));
+        (bool success, bytes memory data) = token0.staticcall(
+            abi.encodeWithSelector(IERC20Minimal.balanceOf.selector, address(this))
+        );
         require(success && data.length >= 32);
         return abi.decode(data, (uint256));
     }
@@ -212,22 +213,22 @@ contract CLPool is ICLPool {
     /// @dev This function is gas optimized to avoid a redundant extcodesize check in addition to the returndatasize
     /// check
     function balance1() private view returns (uint256) {
-        (bool success, bytes memory data) =
-            token1.staticcall(abi.encodeWithSelector(IERC20Minimal.balanceOf.selector, address(this)));
+        (bool success, bytes memory data) = token1.staticcall(
+            abi.encodeWithSelector(IERC20Minimal.balanceOf.selector, address(this))
+        );
         require(success && data.length >= 32);
         return abi.decode(data, (uint256));
     }
 
     /// @inheritdoc ICLPoolDerivedState
-    function snapshotCumulativesInside(int24 tickLower, int24 tickUpper)
+    function snapshotCumulativesInside(
+        int24 tickLower,
+        int24 tickUpper
+    )
         external
         view
         override
-        returns (
-            int56 tickCumulativeInside,
-            uint160 secondsPerLiquidityInsideX128,
-            uint32 secondsInside
-        )
+        returns (int56 tickCumulativeInside, uint160 secondsPerLiquidityInsideX128, uint32 secondsInside)
     {
         checkTicks(tickLower, tickUpper);
 
@@ -270,15 +271,14 @@ contract CLPool is ICLPool {
             );
         } else if (_slot0.tick < tickUpper) {
             uint32 time = _blockTimestamp();
-            (int56 tickCumulative, uint160 secondsPerLiquidityCumulativeX128) =
-                observations.observeSingle(
-                    time,
-                    0,
-                    _slot0.tick,
-                    _slot0.observationIndex,
-                    liquidity,
-                    _slot0.observationCardinality
-                );
+            (int56 tickCumulative, uint160 secondsPerLiquidityCumulativeX128) = observations.observeSingle(
+                time,
+                0,
+                _slot0.tick,
+                _slot0.observationIndex,
+                liquidity,
+                _slot0.observationCardinality
+            );
             return (
                 tickCumulative - tickCumulativeLower - tickCumulativeUpper,
                 secondsPerLiquidityCumulativeX128 -
@@ -296,7 +296,9 @@ contract CLPool is ICLPool {
     }
 
     /// @inheritdoc ICLPoolDerivedState
-    function observe(uint32[] calldata secondsAgos)
+    function observe(
+        uint32[] calldata secondsAgos
+    )
         external
         view
         override
@@ -316,8 +318,10 @@ contract CLPool is ICLPool {
     /// @inheritdoc ICLPoolActions
     function increaseObservationCardinalityNext(uint16 observationCardinalityNext) external override lock {
         uint16 observationCardinalityNextOld = slot0.observationCardinalityNext; // for the event
-        uint16 observationCardinalityNextNew =
-            observations.grow(observationCardinalityNextOld, observationCardinalityNext);
+        uint16 observationCardinalityNextNew = observations.grow(
+            observationCardinalityNextOld,
+            observationCardinalityNext
+        );
         slot0.observationCardinalityNext = observationCardinalityNextNew;
         if (observationCardinalityNextOld != observationCardinalityNextNew) {
             emit IncreaseObservationCardinalityNext(observationCardinalityNextOld, observationCardinalityNextNew);
@@ -339,14 +343,9 @@ contract CLPool is ICLPool {
     /// @return position a storage pointer referencing the position with the given owner and tick range
     /// @return amount0 the amount of token0 owed to the pool, negative if the pool should pay the recipient
     /// @return amount1 the amount of token1 owed to the pool, negative if the pool should pay the recipient
-    function _modifyPosition(ModifyPositionParams memory params)
-        private
-        returns (
-            Position.Info storage position,
-            int256 amount0,
-            int256 amount1
-        )
-    {
+    function _modifyPosition(
+        ModifyPositionParams memory params
+    ) private returns (Position.Info storage position, int256 amount0, int256 amount1) {
         checkTicks(params.tickLower, params.tickUpper);
 
         Slot0 memory _slot0 = slot0; // SLOAD for gas optimization
@@ -429,15 +428,14 @@ contract CLPool is ICLPool {
         bool flippedUpper;
         if (liquidityDelta != 0) {
             uint32 time = _blockTimestamp();
-            (int56 tickCumulative, uint160 secondsPerLiquidityCumulativeX128) =
-                observations.observeSingle(
-                    time,
-                    0,
-                    slot0.tick,
-                    slot0.observationIndex,
-                    liquidity,
-                    slot0.observationCardinality
-                );
+            (int56 tickCumulative, uint160 secondsPerLiquidityCumulativeX128) = observations.observeSingle(
+                time,
+                0,
+                slot0.tick,
+                slot0.observationIndex,
+                liquidity,
+                slot0.observationCardinality
+            );
 
             flippedLower = ticks.update(
                 tickLower,
@@ -474,8 +472,13 @@ contract CLPool is ICLPool {
             }
         }
 
-        (uint256 feeGrowthInside0X128, uint256 feeGrowthInside1X128) =
-            ticks.getFeeGrowthInside(tickLower, tickUpper, tick, _feeGrowthGlobal0X128, _feeGrowthGlobal1X128);
+        (uint256 feeGrowthInside0X128, uint256 feeGrowthInside1X128) = ticks.getFeeGrowthInside(
+            tickLower,
+            tickUpper,
+            tick,
+            _feeGrowthGlobal0X128,
+            _feeGrowthGlobal1X128
+        );
 
         bool staked = (owner == gauge) && (owner != address(0));
         position.update(liquidityDelta, feeGrowthInside0X128, feeGrowthInside1X128, staked);
@@ -500,15 +503,14 @@ contract CLPool is ICLPool {
         bytes calldata data
     ) external override lock returns (uint256 amount0, uint256 amount1) {
         require(amount > 0);
-        (, int256 amount0Int, int256 amount1Int) =
-            _modifyPosition(
-                ModifyPositionParams({
-                    owner: recipient,
-                    tickLower: tickLower,
-                    tickUpper: tickUpper,
-                    liquidityDelta: int256(int128(amount)).toInt128()
-                })
-            );
+        (, int256 amount0Int, int256 amount1Int) = _modifyPosition(
+            ModifyPositionParams({
+                owner: recipient,
+                tickLower: tickLower,
+                tickUpper: tickUpper,
+                liquidityDelta: int256(int128(amount)).toInt128()
+            })
+        );
 
         amount0 = uint256(amount0Int);
         amount1 = uint256(amount1Int);
@@ -612,15 +614,14 @@ contract CLPool is ICLPool {
         uint128 amount,
         address owner
     ) private returns (uint256 amount0, uint256 amount1) {
-        (Position.Info storage position, int256 amount0Int, int256 amount1Int) =
-            _modifyPosition(
-                ModifyPositionParams({
-                    owner: owner,
-                    tickLower: tickLower,
-                    tickUpper: tickUpper,
-                    liquidityDelta: -int256(int128(amount)).toInt128()
-                })
-            );
+        (Position.Info storage position, int256 amount0Int, int256 amount1Int) = _modifyPosition(
+            ModifyPositionParams({
+                owner: owner,
+                tickLower: tickLower,
+                tickUpper: tickUpper,
+                liquidityDelta: -int256(int128(amount)).toInt128()
+            })
+        );
 
         amount0 = uint256(-amount0Int);
         amount1 = uint256(-amount1Int);
@@ -653,8 +654,13 @@ contract CLPool is ICLPool {
             Position.Info storage nftPosition = positions.get(nft, tickLower, tickUpper);
             Position.Info storage gaugePosition = positions.get(gauge, tickLower, tickUpper);
 
-            (uint256 feeGrowthInside0X128, uint256 feeGrowthInside1X128) =
-                ticks.getFeeGrowthInside(tickLower, tickUpper, tick, feeGrowthGlobal0X128, feeGrowthGlobal1X128);
+            (uint256 feeGrowthInside0X128, uint256 feeGrowthInside1X128) = ticks.getFeeGrowthInside(
+                tickLower,
+                tickUpper,
+                tick,
+                feeGrowthGlobal0X128,
+                feeGrowthGlobal1X128
+            );
 
             // Assign the staked positions virtually to the gauge
             nftPosition.update(-stakedLiquidityDelta, feeGrowthInside0X128, feeGrowthInside1X128, false);
@@ -745,31 +751,29 @@ contract CLPool is ICLPool {
 
         slot0.unlocked = false;
 
-        SwapCache memory cache =
-            SwapCache({
-                liquidityStart: liquidity,
-                stakedLiquidityStart: stakedLiquidity,
-                blockTimestamp: _blockTimestamp(),
-                secondsPerLiquidityCumulativeX128: 0,
-                tickCumulative: 0,
-                computedLatestObservation: false
-            });
+        SwapCache memory cache = SwapCache({
+            liquidityStart: liquidity,
+            stakedLiquidityStart: stakedLiquidity,
+            blockTimestamp: _blockTimestamp(),
+            secondsPerLiquidityCumulativeX128: 0,
+            tickCumulative: 0,
+            computedLatestObservation: false
+        });
 
         bool exactInput = amountSpecified > 0;
 
-        SwapState memory state =
-            SwapState({
-                amountSpecifiedRemaining: amountSpecified,
-                amountCalculated: 0,
-                sqrtPriceX96: slot0Start.sqrtPriceX96,
-                tick: slot0Start.tick,
-                fee: fee(),
-                hasUpdatedFees: false,
-                feeGrowthGlobalX128: zeroForOne ? feeGrowthGlobal0X128 : feeGrowthGlobal1X128,
-                gaugeFee: 0,
-                liquidity: cache.liquidityStart,
-                stakedLiquidity: cache.stakedLiquidityStart
-            });
+        SwapState memory state = SwapState({
+            amountSpecifiedRemaining: amountSpecified,
+            amountCalculated: 0,
+            sqrtPriceX96: slot0Start.sqrtPriceX96,
+            tick: slot0Start.tick,
+            fee: fee(),
+            hasUpdatedFees: false,
+            feeGrowthGlobalX128: zeroForOne ? feeGrowthGlobal0X128 : feeGrowthGlobal1X128,
+            gaugeFee: 0,
+            liquidity: cache.liquidityStart,
+            stakedLiquidity: cache.stakedLiquidityStart
+        });
 
         // continue swapping as long as we haven't used the entire input/output and haven't reached the price limit
         while (state.amountSpecifiedRemaining != 0 && state.sqrtPriceX96 != sqrtPriceLimitX96) {
@@ -814,8 +818,11 @@ contract CLPool is ICLPool {
 
             // update global fee tracker and gauge fee
             if (state.liquidity > 0) {
-                (uint256 _feeGrowthGlobalX128, uint256 _stakedFeeAmount) =
-                    calculateFees(step.feeAmount, state.liquidity, state.stakedLiquidity);
+                (uint256 _feeGrowthGlobalX128, uint256 _stakedFeeAmount) = calculateFees(
+                    step.feeAmount,
+                    state.liquidity,
+                    state.stakedLiquidity
+                );
 
                 state.feeGrowthGlobalX128 += _feeGrowthGlobalX128;
                 state.gaugeFee += uint128(_stakedFeeAmount);
@@ -842,16 +849,15 @@ contract CLPool is ICLPool {
                         _updateRewardsGrowthGlobal();
                         state.hasUpdatedFees = true;
                     }
-                    Tick.LiquidityNets memory nets =
-                        ticks.cross(
-                            step.tickNext,
-                            (zeroForOne ? state.feeGrowthGlobalX128 : feeGrowthGlobal0X128),
-                            (zeroForOne ? feeGrowthGlobal1X128 : state.feeGrowthGlobalX128),
-                            cache.secondsPerLiquidityCumulativeX128,
-                            cache.tickCumulative,
-                            cache.blockTimestamp,
-                            rewardGrowthGlobalX128
-                        );
+                    Tick.LiquidityNets memory nets = ticks.cross(
+                        step.tickNext,
+                        (zeroForOne ? state.feeGrowthGlobalX128 : feeGrowthGlobal0X128),
+                        (zeroForOne ? feeGrowthGlobal1X128 : state.feeGrowthGlobalX128),
+                        cache.secondsPerLiquidityCumulativeX128,
+                        cache.tickCumulative,
+                        cache.blockTimestamp,
+                        rewardGrowthGlobalX128
+                    );
                     // if we're moving leftward, we interpret liquidityNet & stakedLiquidityNet as the opposite sign
                     // safe because liquidityNet & stakedLiquidityNet cannot be type(int128).min
                     if (zeroForOne) {
@@ -872,15 +878,14 @@ contract CLPool is ICLPool {
 
         // update tick and write an oracle entry if the tick change
         if (state.tick != slot0Start.tick) {
-            (uint16 observationIndex, uint16 observationCardinality) =
-                observations.write(
-                    slot0Start.observationIndex,
-                    cache.blockTimestamp,
-                    slot0Start.tick,
-                    cache.liquidityStart,
-                    slot0Start.observationCardinality,
-                    slot0Start.observationCardinalityNext
-                );
+            (uint16 observationIndex, uint16 observationCardinality) = observations.write(
+                slot0Start.observationIndex,
+                cache.blockTimestamp,
+                slot0Start.tick,
+                cache.liquidityStart,
+                slot0Start.observationCardinality,
+                slot0Start.observationCardinalityNext
+            );
             (slot0.sqrtPriceX96, slot0.tick, slot0.observationIndex, slot0.observationCardinality) = (
                 state.sqrtPriceX96,
                 state.tick,
@@ -930,12 +935,7 @@ contract CLPool is ICLPool {
     }
 
     /// @inheritdoc ICLPoolActions
-    function flash(
-        address recipient,
-        uint256 amount0,
-        uint256 amount1,
-        bytes calldata data
-    ) external override lock {
+    function flash(address recipient, uint256 amount0, uint256 amount1, bytes calldata data) external override lock {
         uint128 _liquidity = liquidity;
         require(_liquidity > 0, 'L');
 
@@ -1046,11 +1046,10 @@ contract CLPool is ICLPool {
     /// @param _stakedFeeAmount Fee amount for staked LPs consisting of staked liquidity contribution
     /// @return unstakedFeeAmount Fee amount for unstaked LPs after accounting for staked liquidity contribution and unstaked fee
     /// @return stakedFeeAmount Fee amount for staked LPs consisting of staked liquidity contribution and unstaked fee
-    function applyUnstakedFees(uint256 _unstakedFeeAmount, uint256 _stakedFeeAmount)
-        internal
-        view
-        returns (uint256 unstakedFeeAmount, uint256 stakedFeeAmount)
-    {
+    function applyUnstakedFees(
+        uint256 _unstakedFeeAmount,
+        uint256 _stakedFeeAmount
+    ) internal view returns (uint256 unstakedFeeAmount, uint256 stakedFeeAmount) {
         uint256 _stakedFee = FullMath.mulDivRoundingUp(_unstakedFeeAmount, unstakedFee(), 1_000_000);
         unstakedFeeAmount = _unstakedFeeAmount - _stakedFee;
         stakedFeeAmount = _stakedFeeAmount + _stakedFee;

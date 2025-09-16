@@ -17,13 +17,12 @@ contract MediumFee1to1Price0LiquidityAllLiquidityAroundCurrentPriceAllStakedTest
         uint160 startingPrice = encodePriceSqrt(1, 1);
 
         string memory poolName = '.medium_fee_1to1_price_0_liquidity_all_liquidity_around_current_price';
-        address pool =
-            poolFactory.createPool({
-                tokenA: address(token0),
-                tokenB: address(token1),
-                tickSpacing: tickSpacing,
-                sqrtPriceX96: startingPrice
-            });
+        address pool = poolFactory.createPool({
+            tokenA: address(token0),
+            tokenB: address(token1),
+            tickSpacing: tickSpacing,
+            sqrtPriceX96: startingPrice
+        });
 
         uint128 liquidity = 2e18;
 
@@ -46,24 +45,22 @@ contract MediumFee1to1Price0LiquidityAllLiquidityAroundCurrentPriceAllStakedTest
         uint256 positionsLength = stakedPositions.length;
 
         for (uint256 i = 0; i < positionsLength; i++) {
-            (uint256 amount0, uint256 amount1) =
-                LiquidityAmounts.getAmountsForLiquidity(
-                    startingPrice,
-                    TickMath.getSqrtRatioAtTick(stakedPositions[i].tickLower),
-                    TickMath.getSqrtRatioAtTick(stakedPositions[i].tickUpper),
-                    stakedPositions[i].liquidity
-                );
+            (uint256 amount0, uint256 amount1) = LiquidityAmounts.getAmountsForLiquidity(
+                startingPrice,
+                TickMath.getSqrtRatioAtTick(stakedPositions[i].tickLower),
+                TickMath.getSqrtRatioAtTick(stakedPositions[i].tickUpper),
+                stakedPositions[i].liquidity
+            );
 
             vm.startPrank(users.alice);
-            uint256 tokenId =
-                nftCallee.mintNewCustomRangePositionForUserWithCustomTickSpacing(
-                    amount0 + 1,
-                    amount1 + 1,
-                    stakedPositions[i].tickLower,
-                    stakedPositions[i].tickUpper,
-                    tickSpacing,
-                    users.alice
-                );
+            uint256 tokenId = nftCallee.mintNewCustomRangePositionForUserWithCustomTickSpacing(
+                amount0 + 1,
+                amount1 + 1,
+                stakedPositions[i].tickLower,
+                stakedPositions[i].tickUpper,
+                tickSpacing,
+                users.alice
+            );
             nft.approve(address(gauge), tokenId);
             gauge.deposit(tokenId);
         }

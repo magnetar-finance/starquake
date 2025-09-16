@@ -7,14 +7,13 @@ contract GetUnstakedFeeTest is CLFactoryTest {
     CLGauge public gauge;
 
     function test_KilledGaugeReturnsZeroUnstakedFee() public {
-        address pool =
-            createAndCheckPool({
-                factory: poolFactory,
-                token0: TEST_TOKEN_1,
-                token1: TEST_TOKEN_0,
-                tickSpacing: TICK_SPACING_LOW,
-                sqrtPriceX96: encodePriceSqrt(1, 1)
-            });
+        address pool = createAndCheckPool({
+            factory: poolFactory,
+            token0: TEST_TOKEN_1,
+            token1: TEST_TOKEN_0,
+            tickSpacing: TICK_SPACING_LOW,
+            sqrtPriceX96: encodePriceSqrt(1, 1)
+        });
 
         gauge = CLGauge(voter.createGauge({_poolFactory: address(poolFactory), _pool: address(pool)}));
 
@@ -28,14 +27,13 @@ contract GetUnstakedFeeTest is CLFactoryTest {
     }
 
     function test_NoGaugeReturnsZeroUnstakedFee() public {
-        address pool =
-            createAndCheckPool({
-                factory: poolFactory,
-                token0: TEST_TOKEN_1,
-                token1: TEST_TOKEN_0,
-                tickSpacing: TICK_SPACING_LOW,
-                sqrtPriceX96: encodePriceSqrt(1, 1)
-            });
+        address pool = createAndCheckPool({
+            factory: poolFactory,
+            token0: TEST_TOKEN_1,
+            token1: TEST_TOKEN_0,
+            tickSpacing: TICK_SPACING_LOW,
+            sqrtPriceX96: encodePriceSqrt(1, 1)
+        });
 
         assertEq(uint256(poolFactory.getUnstakedFee(pool)), 0);
     }

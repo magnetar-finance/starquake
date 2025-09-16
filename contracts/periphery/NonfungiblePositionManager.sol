@@ -97,7 +97,9 @@ contract NonfungiblePositionManager is
     }
 
     /// @inheritdoc INonfungiblePositionManager
-    function positions(uint256 tokenId)
+    function positions(
+        uint256 tokenId
+    )
         external
         view
         override
@@ -145,17 +147,14 @@ contract NonfungiblePositionManager is
     }
 
     /// @inheritdoc INonfungiblePositionManager
-    function mint(MintParams calldata params)
+    function mint(
+        MintParams calldata params
+    )
         external
         payable
         override
         checkDeadline(params.deadline)
-        returns (
-            uint256 tokenId,
-            uint128 liquidity,
-            uint256 amount0,
-            uint256 amount1
-        )
+        returns (uint256 tokenId, uint128 liquidity, uint256 amount0, uint256 amount1)
     {
         if (params.sqrtPriceX96 != 0) {
             ICLFactory(factory).createPool({
@@ -165,8 +164,11 @@ contract NonfungiblePositionManager is
                 sqrtPriceX96: params.sqrtPriceX96
             });
         }
-        PoolAddress.PoolKey memory poolKey =
-            PoolAddress.PoolKey({token0: params.token0, token1: params.token1, tickSpacing: params.tickSpacing});
+        PoolAddress.PoolKey memory poolKey = PoolAddress.PoolKey({
+            token0: params.token0,
+            token1: params.token1,
+            tickSpacing: params.tickSpacing
+        });
 
         ICLPool pool = ICLPool(PoolAddress.computeAddress(factory, poolKey));
 
@@ -222,16 +224,14 @@ contract NonfungiblePositionManager is
     }
 
     /// @inheritdoc INonfungiblePositionManager
-    function increaseLiquidity(IncreaseLiquidityParams calldata params)
+    function increaseLiquidity(
+        IncreaseLiquidityParams calldata params
+    )
         external
         payable
         override
         checkDeadline(params.deadline)
-        returns (
-            uint128 liquidity,
-            uint256 amount0,
-            uint256 amount1
-        )
+        returns (uint128 liquidity, uint256 amount0, uint256 amount1)
     {
         Position storage position = _positions[params.tokenId];
 
@@ -257,8 +257,11 @@ contract NonfungiblePositionManager is
             })
         );
 
-        bytes32 positionKey =
-            PositionKey.compute(isStaked ? gauge : address(this), position.tickLower, position.tickUpper);
+        bytes32 positionKey = PositionKey.compute(
+            isStaked ? gauge : address(this),
+            position.tickLower,
+            position.tickUpper
+        );
 
         // this is now updated to the current transaction
         (, uint256 feeGrowthInside0LastX128, uint256 feeGrowthInside1LastX128, , ) = pool.positions(positionKey);
@@ -291,7 +294,9 @@ contract NonfungiblePositionManager is
     }
 
     /// @inheritdoc INonfungiblePositionManager
-    function decreaseLiquidity(DecreaseLiquidityParams calldata params)
+    function decreaseLiquidity(
+        DecreaseLiquidityParams calldata params
+    )
         external
         payable
         override
@@ -318,8 +323,11 @@ contract NonfungiblePositionManager is
 
         require(amount0 >= params.amount0Min && amount1 >= params.amount1Min, 'PS');
 
-        bytes32 positionKey =
-            PositionKey.compute(isStaked ? gauge : address(this), position.tickLower, position.tickUpper);
+        bytes32 positionKey = PositionKey.compute(
+            isStaked ? gauge : address(this),
+            position.tickLower,
+            position.tickUpper
+        );
         // this is now updated to the current transaction
         (, uint256 feeGrowthInside0LastX128, uint256 feeGrowthInside1LastX128, , ) = pool.positions(positionKey);
 
@@ -356,13 +364,9 @@ contract NonfungiblePositionManager is
     }
 
     /// @inheritdoc INonfungiblePositionManager
-    function collect(CollectParams calldata params)
-        external
-        payable
-        override
-        isAuthorizedForToken(params.tokenId)
-        returns (uint256 amount0, uint256 amount1)
-    {
+    function collect(
+        CollectParams calldata params
+    ) external payable override isAuthorizedForToken(params.tokenId) returns (uint256 amount0, uint256 amount1) {
         require(params.amount0Max > 0 || params.amount1Max > 0);
         // allow collecting to the nft position manager address with address 0
         address recipient = params.recipient == address(0) ? address(this) : params.recipient;
@@ -416,11 +420,10 @@ contract NonfungiblePositionManager is
         }
 
         // compute the arguments to give to the pool#collect method
-        (uint128 amount0Collect, uint128 amount1Collect) =
-            (
-                params.amount0Max > tokensOwed0 ? tokensOwed0 : params.amount0Max,
-                params.amount1Max > tokensOwed1 ? tokensOwed1 : params.amount1Max
-            );
+        (uint128 amount0Collect, uint128 amount1Collect) = (
+            params.amount0Max > tokensOwed0 ? tokensOwed0 : params.amount0Max,
+            params.amount1Max > tokensOwed1 ? tokensOwed1 : params.amount1Max
+        );
 
         // the actual amounts collected are returned
         if (!isStaked) {
@@ -470,12 +473,7 @@ contract NonfungiblePositionManager is
     }
 
     /// @dev Overrides approve to use the operator in the position, which is packed with the position permit nonce
-    function _approve(
-        address to,
-        uint256 tokenId,
-        address auth,
-        bool emitEvent
-    ) internal virtual override(ERC721) {
+    function _approve(address to, uint256 tokenId, address auth, bool emitEvent) internal virtual override(ERC721) {
         if (emitEvent || auth != address(0)) {
             address tokenOwner = _requireOwned(tokenId);
 
@@ -521,7 +519,9 @@ contract NonfungiblePositionManager is
         return super._update(to, tokenId, auth);
     }
 
-    function supportsInterface(bytes4 interfaceId) public view virtual override(ERC721, ERC721Enumerable, IERC165) returns (bool) {
+    function supportsInterface(
+        bytes4 interfaceId
+    ) public view virtual override(ERC721, ERC721Enumerable, IERC165) returns (bool) {
         return super.supportsInterface(interfaceId);
     }
 }

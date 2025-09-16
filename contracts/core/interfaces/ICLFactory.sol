@@ -109,11 +109,7 @@ interface ICLFactory {
     /// @param tokenB The contract address of the other token
     /// @param tickSpacing The tick spacing of the pool
     /// @return pool The pool address
-    function getPool(
-        address tokenA,
-        address tokenB,
-        int24 tickSpacing
-    ) external view returns (address pool);
+    function getPool(address tokenA, address tokenB, int24 tickSpacing) external view returns (address pool);
 
     /// @notice Return address of pool created by this factory given its `index`
     /// @param index Index of the pool

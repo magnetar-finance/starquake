@@ -19,7 +19,7 @@ abstract contract Constants {
     uint256 public constant TOKEN_1 = 1e18;
     uint256 public constant USDC_1 = 1e6;
 
-    uint256 public constant TOKEN_2_TO_255 = 2**255;
+    uint256 public constant TOKEN_2_TO_255 = 2 ** 255;
 
     uint160 public constant MIN_SQRT_RATIO = 4295128739;
     uint160 public constant MAX_SQRT_RATIO = 1461446703485210103287273052203988822378723970342;

@@ -97,8 +97,11 @@ contract NotifyRewardAmountTest is CLGaugeTest {
 
     function test_NotifyRewardAmountCollectsFeesForAllPositionsStakedWithIntermediaryFlashCorrectly() public {
         vm.startPrank(users.alice);
-        uint256 tokenId =
-            nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(TOKEN_1 * 2, TOKEN_1 * 2, users.alice);
+        uint256 tokenId = nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(
+            TOKEN_1 * 2,
+            TOKEN_1 * 2,
+            users.alice
+        );
 
         nft.approve(address(gauge), tokenId);
         gauge.deposit(tokenId);
@@ -162,8 +165,11 @@ contract NotifyRewardAmountTest is CLGaugeTest {
 
     function test_NotifyRewardAmountCollectsFeesForAllPositionsStakedWithIntermediarySwapCorrectly() public {
         vm.startPrank(users.alice);
-        uint256 tokenId =
-            nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(TOKEN_1 * 10, TOKEN_1 * 10, users.alice);
+        uint256 tokenId = nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(
+            TOKEN_1 * 10,
+            TOKEN_1 * 10,
+            users.alice
+        );
 
         nft.approve(address(gauge), tokenId);
         gauge.deposit(tokenId);
@@ -221,8 +227,11 @@ contract NotifyRewardAmountTest is CLGaugeTest {
 
         // generate gauge fees
         vm.startPrank(users.alice);
-        uint256 tokenId =
-            nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(TOKEN_1 * 2, TOKEN_1 * 2, users.alice);
+        uint256 tokenId = nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(
+            TOKEN_1 * 2,
+            TOKEN_1 * 2,
+            users.alice
+        );
         nft.approve(address(gauge), tokenId);
         gauge.deposit(tokenId);
         clCallee.swapExact0For1(address(pool), TOKEN_1, users.alice, MIN_SQRT_RATIO + 1);
@@ -255,8 +264,11 @@ contract NotifyRewardAmountTest is CLGaugeTest {
     }
 
     function test_NotifyRewardAmountSkippedForOneEpoch() public {
-        uint256 tokenId =
-            nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(TOKEN_1 * 10, TOKEN_1 * 10, users.alice);
+        uint256 tokenId = nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(
+            TOKEN_1 * 10,
+            TOKEN_1 * 10,
+            users.alice
+        );
 
         vm.startPrank(users.alice);
         nft.approve(address(gauge), tokenId);
@@ -268,8 +280,11 @@ contract NotifyRewardAmountTest is CLGaugeTest {
         skipToNextEpoch(0);
         // no notifyRewardAmount happens for 1 entire epoch
 
-        uint256 tokenId2 =
-            nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(TOKEN_1 * 10, TOKEN_1 * 10, users.alice);
+        uint256 tokenId2 = nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(
+            TOKEN_1 * 10,
+            TOKEN_1 * 10,
+            users.alice
+        );
 
         vm.startPrank(users.alice);
         nft.approve(address(gauge), tokenId2);

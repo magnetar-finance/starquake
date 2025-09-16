@@ -149,12 +149,11 @@ contract CLFactory is ICLFactory {
     /// @inheritdoc ICLFactory
     function getSwapFee(address pool) external view override returns (uint24) {
         if (swapFeeModule != address(0)) {
-            (bool success, bytes memory data) =
-                swapFeeModule.excessivelySafeStaticCall(
-                    200_000,
-                    32,
-                    abi.encodeWithSelector(IFeeModule.getFee.selector, pool)
-                );
+            (bool success, bytes memory data) = swapFeeModule.excessivelySafeStaticCall(
+                200_000,
+                32,
+                abi.encodeWithSelector(IFeeModule.getFee.selector, pool)
+            );
             if (success) {
                 uint24 fee = abi.decode(data, (uint24));
                 if (fee <= 100_000) {
@@ -172,12 +171,11 @@ contract CLFactory is ICLFactory {
             return 0;
         }
         if (unstakedFeeModule != address(0)) {
-            (bool success, bytes memory data) =
-                unstakedFeeModule.excessivelySafeStaticCall(
-                    200_000,
-                    32,
-                    abi.encodeWithSelector(IFeeModule.getFee.selector, pool)
-                );
+            (bool success, bytes memory data) = unstakedFeeModule.excessivelySafeStaticCall(
+                200_000,
+                32,
+                abi.encodeWithSelector(IFeeModule.getFee.selector, pool)
+            );
             if (success) {
                 uint24 fee = abi.decode(data, (uint24));
                 if (fee <= 1_000_000) {

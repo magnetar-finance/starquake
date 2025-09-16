@@ -6,10 +6,7 @@ import './helpers/Hevm.sol';
 import {CoreTestERC20} from 'contracts/core/test/CoreTestERC20.sol';
 import {CLPool} from 'contracts/core/CLPool.sol';
 import {CLGauge} from 'contracts/gauge/CLGauge.sol';
-import {
-    INonfungiblePositionManager,
-    NonfungiblePositionManager
-} from 'contracts/periphery/NonfungiblePositionManager.sol';
+import {INonfungiblePositionManager, NonfungiblePositionManager} from 'contracts/periphery/NonfungiblePositionManager.sol';
 import {IVoter} from 'contracts/test/MockVoter.sol';
 import {ReactorTimeLibrary} from 'contracts/libraries/ReactorTimeLibrary.sol';
 
@@ -112,11 +109,9 @@ contract E2E_swap {
         }
     }
 
-    function get_random_zeroForOne_priceLimit(int256 _amountSpecified)
-        internal
-        view
-        returns (uint160 sqrtPriceLimitX96)
-    {
+    function get_random_zeroForOne_priceLimit(
+        int256 _amountSpecified
+    ) internal view returns (uint160 sqrtPriceLimitX96) {
         // help echidna a bit by calculating a valid sqrtPriceLimitX96 using the amount as random seed
         (uint160 currentPrice, , , , , ) = pool.slot0();
         uint160 minimumPrice = TickMath.MIN_SQRT_RATIO;
@@ -127,11 +122,9 @@ contract E2E_swap {
             );
     }
 
-    function get_random_oneForZero_priceLimit(int256 _amountSpecified)
-        internal
-        view
-        returns (uint160 sqrtPriceLimitX96)
-    {
+    function get_random_oneForZero_priceLimit(
+        int256 _amountSpecified
+    ) internal view returns (uint160 sqrtPriceLimitX96) {
         // help echidna a bit by calculating a valid sqrtPriceLimitX96 using the amount as random seed
         (uint160 currentPrice, , , , , ) = pool.slot0();
         uint160 maximumPrice = TickMath.MAX_SQRT_RATIO;
@@ -356,11 +349,9 @@ contract E2E_swap {
     // Helper to reconstruct the "random" init setup of the pool
     //
     //
-    function viewRandomInit(uint128 _seed)
-        public
-        view
-        returns (PoolParams memory _poolParams, PoolPositions memory _poolPositions)
-    {
+    function viewRandomInit(
+        uint128 _seed
+    ) public view returns (PoolParams memory _poolParams, PoolPositions memory _poolPositions) {
         _poolParams = forgePoolParams(_seed);
         _poolPositions = forgePoolPositions(_seed, _poolParams.tickSpacing, _poolParams.tickCount, _poolParams.maxTick);
     }
@@ -540,16 +531,18 @@ contract E2E_swap {
         uint160 sqrtPriceLimitX96 = get_random_zeroForOne_priceLimit(_amount);
         // console.log('sqrtPriceLimitX96 = %s', sqrtPriceLimitX96);
 
-        (CLSwapper.SwapperStats memory bfre, CLSwapper.SwapperStats memory aftr) =
-            swapper.doSwap(true, _amountSpecified, sqrtPriceLimitX96);
+        (CLSwapper.SwapperStats memory bfre, CLSwapper.SwapperStats memory aftr) = swapper.doSwap(
+            true,
+            _amountSpecified,
+            sqrtPriceLimitX96
+        );
 
-        GaugeFeesBeforeAndAfter memory gfba =
-            GaugeFeesBeforeAndAfter({
-                gaugeFees_sell_bfre: bfre.gaugeFees0,
-                gaugeFees_sell_aftr: aftr.gaugeFees0,
-                gaugeFees_buy_bfre: bfre.gaugeFees1,
-                gaugeFees_buy_aftr: aftr.gaugeFees1
-            });
+        GaugeFeesBeforeAndAfter memory gfba = GaugeFeesBeforeAndAfter({
+            gaugeFees_sell_bfre: bfre.gaugeFees0,
+            gaugeFees_sell_aftr: aftr.gaugeFees0,
+            gaugeFees_buy_bfre: bfre.gaugeFees1,
+            gaugeFees_buy_aftr: aftr.gaugeFees1
+        });
 
         check_swap_invariants(
             bfre.tick,
@@ -588,16 +581,18 @@ contract E2E_swap {
         uint160 sqrtPriceLimitX96 = get_random_oneForZero_priceLimit(_amount);
         // console.log('sqrtPriceLimitX96 = %s', sqrtPriceLimitX96);
 
-        (CLSwapper.SwapperStats memory bfre, CLSwapper.SwapperStats memory aftr) =
-            swapper.doSwap(false, _amountSpecified, sqrtPriceLimitX96);
+        (CLSwapper.SwapperStats memory bfre, CLSwapper.SwapperStats memory aftr) = swapper.doSwap(
+            false,
+            _amountSpecified,
+            sqrtPriceLimitX96
+        );
 
-        GaugeFeesBeforeAndAfter memory gfba =
-            GaugeFeesBeforeAndAfter({
-                gaugeFees_sell_bfre: bfre.gaugeFees1,
-                gaugeFees_sell_aftr: aftr.gaugeFees1,
-                gaugeFees_buy_bfre: bfre.gaugeFees0,
-                gaugeFees_buy_aftr: aftr.gaugeFees0
-            });
+        GaugeFeesBeforeAndAfter memory gfba = GaugeFeesBeforeAndAfter({
+            gaugeFees_sell_bfre: bfre.gaugeFees1,
+            gaugeFees_sell_aftr: aftr.gaugeFees1,
+            gaugeFees_buy_bfre: bfre.gaugeFees0,
+            gaugeFees_buy_aftr: aftr.gaugeFees0
+        });
 
         check_swap_invariants(
             bfre.tick,
@@ -636,16 +631,18 @@ contract E2E_swap {
         uint160 sqrtPriceLimitX96 = get_random_zeroForOne_priceLimit(_amount);
         // console.log('sqrtPriceLimitX96 = %s', sqrtPriceLimitX96);
 
-        (CLSwapper.SwapperStats memory bfre, CLSwapper.SwapperStats memory aftr) =
-            swapper.doSwap(true, _amountSpecified, sqrtPriceLimitX96);
+        (CLSwapper.SwapperStats memory bfre, CLSwapper.SwapperStats memory aftr) = swapper.doSwap(
+            true,
+            _amountSpecified,
+            sqrtPriceLimitX96
+        );
 
-        GaugeFeesBeforeAndAfter memory gfba =
-            GaugeFeesBeforeAndAfter({
-                gaugeFees_sell_bfre: bfre.gaugeFees0,
-                gaugeFees_sell_aftr: aftr.gaugeFees0,
-                gaugeFees_buy_bfre: bfre.gaugeFees1,
-                gaugeFees_buy_aftr: aftr.gaugeFees1
-            });
+        GaugeFeesBeforeAndAfter memory gfba = GaugeFeesBeforeAndAfter({
+            gaugeFees_sell_bfre: bfre.gaugeFees0,
+            gaugeFees_sell_aftr: aftr.gaugeFees0,
+            gaugeFees_buy_bfre: bfre.gaugeFees1,
+            gaugeFees_buy_aftr: aftr.gaugeFees1
+        });
 
         check_swap_invariants(
             bfre.tick,
@@ -684,16 +681,18 @@ contract E2E_swap {
         uint160 sqrtPriceLimitX96 = get_random_oneForZero_priceLimit(_amount);
         // console.log('sqrtPriceLimitX96 = %s', sqrtPriceLimitX96);
 
-        (CLSwapper.SwapperStats memory bfre, CLSwapper.SwapperStats memory aftr) =
-            swapper.doSwap(false, _amountSpecified, sqrtPriceLimitX96);
+        (CLSwapper.SwapperStats memory bfre, CLSwapper.SwapperStats memory aftr) = swapper.doSwap(
+            false,
+            _amountSpecified,
+            sqrtPriceLimitX96
+        );
 
-        GaugeFeesBeforeAndAfter memory gfba =
-            GaugeFeesBeforeAndAfter({
-                gaugeFees_sell_bfre: bfre.gaugeFees1,
-                gaugeFees_sell_aftr: aftr.gaugeFees1,
-                gaugeFees_buy_bfre: bfre.gaugeFees0,
-                gaugeFees_buy_aftr: aftr.gaugeFees0
-            });
+        GaugeFeesBeforeAndAfter memory gfba = GaugeFeesBeforeAndAfter({
+            gaugeFees_sell_bfre: bfre.gaugeFees1,
+            gaugeFees_sell_aftr: aftr.gaugeFees1,
+            gaugeFees_buy_bfre: bfre.gaugeFees0,
+            gaugeFees_buy_aftr: aftr.gaugeFees0
+        });
 
         check_swap_invariants(
             bfre.tick,
@@ -721,11 +720,7 @@ contract E2E_swap {
         skip_some_time(_time);
     }
 
-    function testEchidna_emission_claiming_with_get_rewards(
-        uint128 _amount,
-        uint8 _position,
-        uint256 _time
-    ) public {
+    function testEchidna_emission_claiming_with_get_rewards(uint128 _amount, uint8 _position, uint256 _time) public {
         require(_amount != 0);
 
         if (!inited) _init(_amount);
@@ -752,11 +747,7 @@ contract E2E_swap {
         skip_some_time(_time);
     }
 
-    function testEchidna_unstake_position(
-        uint128 _amount,
-        uint8 _position,
-        uint256 _time
-    ) public {
+    function testEchidna_unstake_position(uint128 _amount, uint8 _position, uint256 _time) public {
         require(_amount != 0);
 
         if (!inited) _init(_amount);
@@ -791,11 +782,7 @@ contract E2E_swap {
         skip_some_time(_time);
     }
 
-    function testEchidna_stake_position(
-        uint128 _amount,
-        uint8 _position,
-        uint256 _time
-    ) public {
+    function testEchidna_stake_position(uint128 _amount, uint8 _position, uint256 _time) public {
         require(_amount != 0);
 
         if (!inited) _init(_amount);

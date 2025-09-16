@@ -22,7 +22,7 @@ import Values from '../constants/values.json';
 async function deployLibrary(typeName: string, ...args: any[]): Promise<Contract> {
   const ctrFactory = await ethers.getContractFactory(typeName);
 
-  const ctr = ((await ctrFactory.deploy(...args)) as unknown) as Contract;
+  const ctr = (await ctrFactory.deploy(...args)) as unknown as Contract;
   await ctr.deployed();
   return ctr;
 }
@@ -30,8 +30,8 @@ async function deployLibrary(typeName: string, ...args: any[]): Promise<Contract
 async function deploy<Type>(typeName: string, libraries?: Libraries, ...args: any[]): Promise<Type> {
   const ctrFactory = await ethers.getContractFactory(typeName, { libraries });
 
-  const ctr = ((await ctrFactory.deploy(...args)) as unknown) as Type;
-  await ((ctr as unknown) as Contract).deployed();
+  const ctr = (await ctrFactory.deploy(...args)) as unknown as Type;
+  await (ctr as unknown as Contract).deployed();
   return ctr;
 }
 
@@ -51,7 +51,7 @@ async function main() {
   // Network ID
   const networkId = network.config.chainId as number;
   // Constants
-  const CONSTANTS = Values[(networkId as unknown) as keyof typeof Values];
+  const CONSTANTS = Values[networkId as unknown as keyof typeof Values];
   // deployment
   const poolImplementation = await deploy<CLPool>('CLPool');
   const poolFactory = await deploy<CLFactory>('CLFactory', undefined, CONSTANTS.Voter, poolImplementation.address);

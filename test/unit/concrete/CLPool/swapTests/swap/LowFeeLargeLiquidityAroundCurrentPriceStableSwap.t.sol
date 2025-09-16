@@ -13,13 +13,12 @@ contract LowFeeLargeLiquidityAroundCurrentPriceStableSwapTest is CLPoolSwapNoSta
         uint160 startingPrice = encodePriceSqrt(1, 1);
 
         string memory poolName = '.low_fee_large_liquidity_around_current_price_stable_swap';
-        address pool =
-            poolFactory.createPool({
-                tokenA: address(token0),
-                tokenB: address(token1),
-                tickSpacing: tickSpacing,
-                sqrtPriceX96: startingPrice
-            });
+        address pool = poolFactory.createPool({
+            tokenA: address(token0),
+            tokenB: address(token1),
+            tickSpacing: tickSpacing,
+            sqrtPriceX96: startingPrice
+        });
 
         uint128 liquidity = 2e18;
 

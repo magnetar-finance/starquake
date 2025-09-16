@@ -129,10 +129,9 @@ export const v3RouterFixture: Fixture<{
 }> = async ([wallet], provider) => {
   const { factory, nft, weth9, tokens, nftDescriptor } = await v3CoreFactoryFixture([wallet], provider);
 
-  const router = (await (await ethers.getContractFactory('MockTimeSwapRouter')).deploy(
-    factory.address,
-    weth9.address
-  )) as MockTimeSwapRouter;
+  const router = (await (
+    await ethers.getContractFactory('MockTimeSwapRouter')
+  ).deploy(factory.address, weth9.address)) as MockTimeSwapRouter;
 
   return { factory, weth9, router, nft, tokens, nftDescriptor };
 };

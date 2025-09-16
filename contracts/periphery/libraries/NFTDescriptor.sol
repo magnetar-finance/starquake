@@ -37,20 +37,18 @@ library NFTDescriptor {
 
     function constructTokenURI(ConstructTokenURIParams memory params) public pure returns (string memory) {
         string memory name = generateName(params);
-        string memory descriptionPartOne =
-            generateDescriptionPartOne(
-                escapeQuotes(params.quoteTokenSymbol),
-                escapeQuotes(params.baseTokenSymbol),
-                addressToString(params.poolAddress)
-            );
-        string memory descriptionPartTwo =
-            generateDescriptionPartTwo(
-                params.tokenId.toString(),
-                escapeQuotes(params.baseTokenSymbol),
-                addressToString(params.quoteTokenAddress),
-                addressToString(params.baseTokenAddress),
-                (uint256(uint24(params.tickSpacing))).toString()
-            );
+        string memory descriptionPartOne = generateDescriptionPartOne(
+            escapeQuotes(params.quoteTokenSymbol),
+            escapeQuotes(params.baseTokenSymbol),
+            addressToString(params.poolAddress)
+        );
+        string memory descriptionPartTwo = generateDescriptionPartTwo(
+            params.tokenId.toString(),
+            escapeQuotes(params.baseTokenSymbol),
+            addressToString(params.quoteTokenAddress),
+            addressToString(params.baseTokenAddress),
+            (uint256(uint24(params.tickSpacing))).toString()
+        );
 
         return
             string(
@@ -213,7 +211,7 @@ library NFTDescriptor {
     function sigfigsRounded(uint256 value, uint8 digits) private pure returns (uint256, bool) {
         bool extraDigit;
         if (digits > 5) {
-            value = value.div((10**(digits - 5)));
+            value = value.div((10 ** (digits - 5)));
         }
         bool roundUp = value % 10 > 4;
         value = value.div(10);
@@ -235,12 +233,12 @@ library NFTDescriptor {
         uint256 difference = abs(int256(int8(baseTokenDecimals)).sub(int256(int8(quoteTokenDecimals))));
         if (difference > 0 && difference <= 18) {
             if (baseTokenDecimals > quoteTokenDecimals) {
-                adjustedSqrtRatioX96 = sqrtRatioX96.mul(10**(difference.div(2)));
+                adjustedSqrtRatioX96 = sqrtRatioX96.mul(10 ** (difference.div(2)));
                 if (difference % 2 == 1) {
                     adjustedSqrtRatioX96 = FullMath.mulDiv(adjustedSqrtRatioX96, sqrt10X128, 1 << 128);
                 }
             } else {
-                adjustedSqrtRatioX96 = sqrtRatioX96.div(10**(difference.div(2)));
+                adjustedSqrtRatioX96 = sqrtRatioX96.div(10 ** (difference.div(2)));
                 if (difference % 2 == 1) {
                     adjustedSqrtRatioX96 = FullMath.mulDiv(adjustedSqrtRatioX96, 1 << 128, sqrt10X128);
                 }
@@ -262,11 +260,11 @@ library NFTDescriptor {
         uint256 adjustedSqrtRatioX96 = adjustForDecimalPrecision(sqrtRatioX96, baseTokenDecimals, quoteTokenDecimals);
         uint256 value = FullMath.mulDiv(adjustedSqrtRatioX96, adjustedSqrtRatioX96, 1 << 64);
 
-        bool priceBelow1 = adjustedSqrtRatioX96 < 2**96;
+        bool priceBelow1 = adjustedSqrtRatioX96 < 2 ** 96;
         if (priceBelow1) {
-            value = FullMath.mulDiv(value, 10**44, 1 << 128);
+            value = FullMath.mulDiv(value, 10 ** 44, 1 << 128);
         } else {
-            value = FullMath.mulDiv(value, 10**5, 1 << 128);
+            value = FullMath.mulDiv(value, 10 ** 5, 1 << 128);
         }
 
         uint256 temp = value;
@@ -339,7 +337,7 @@ library NFTDescriptor {
             params.sigfigIndex = uint8((params.bufferLength).sub(2));
             params.isLessThanOne = true;
         }
-        params.sigfigs = uint256(fee).div(10**(digits.sub(numSigfigs)));
+        params.sigfigs = uint256(fee).div(10 ** (digits.sub(numSigfigs)));
         params.isPercent = true;
         params.decimalIndex = digits > 4 ? uint8(digits.sub(4)) : 0;
 

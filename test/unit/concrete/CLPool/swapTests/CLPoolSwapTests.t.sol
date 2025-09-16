@@ -596,8 +596,10 @@ abstract contract CLPoolSwapTests is CLPoolTest {
         );
         assertEq(ase.entries[swapEventIndex].topics[1], bytes32(uint256(uint160(address(clCallee)))));
         assertEq(ase.entries[swapEventIndex].topics[2], bytes32(uint256(uint160(users.alice))));
-        (int256 amount0, int256 amount1, uint160 sqrtPriceX96, uint128 liquidity, int24 tick) =
-            abi.decode(ase.entries[swapEventIndex].data, (int256, int256, uint160, uint128, int24));
+        (int256 amount0, int256 amount1, uint160 sqrtPriceX96, uint128 liquidity, int24 tick) = abi.decode(
+            ase.entries[swapEventIndex].data,
+            (int256, int256, uint160, uint128, int24)
+        );
         assertEq(amount0, ase.poolBalance0Delta);
         assertEq(amount1, ase.poolBalance1Delta);
         assertEq(uint256(sqrtPriceX96), uint256(ase.sqrtPriceX96After));

@@ -13,20 +13,10 @@ interface IHevm {
     function load(address where, bytes32 slot) external returns (bytes32);
 
     // Stores a value to an address' storage slot
-    function store(
-        address where,
-        bytes32 slot,
-        bytes32 value
-    ) external;
+    function store(address where, bytes32 slot, bytes32 value) external;
 
     // Signs data (privateKey, digest) => (r, v, s)
-    function sign(uint256 privateKey, bytes32 digest)
-        external
-        returns (
-            uint8 r,
-            bytes32 v,
-            bytes32 s
-        );
+    function sign(uint256 privateKey, bytes32 digest) external returns (uint8 r, bytes32 v, bytes32 s);
 
     // Performs a foreign function call via terminal
     function ffi(string[] calldata inputs) external returns (bytes memory result);

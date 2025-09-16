@@ -39,15 +39,9 @@ library Path {
     /// @return tokenA The first token of the given pool
     /// @return tokenB The second token of the given pool
     /// @return tickSpacing The tick spacing of the pool
-    function decodeFirstPool(bytes memory path)
-        internal
-        pure
-        returns (
-            address tokenA,
-            address tokenB,
-            int24 tickSpacing
-        )
-    {
+    function decodeFirstPool(
+        bytes memory path
+    ) internal pure returns (address tokenA, address tokenB, int24 tickSpacing) {
         tokenA = path.toAddress(0);
         tickSpacing = path.toInt24(ADDR_SIZE);
         tokenB = path.toAddress(NEXT_OFFSET);

@@ -11,10 +11,7 @@ import {CLFactory} from 'contracts/core/CLFactory.sol';
 import {IVoter, MockVoter} from 'contracts/test/MockVoter.sol';
 import {IVotingEscrow, MockVotingEscrow} from 'contracts/test/MockVotingEscrow.sol';
 import {IFactoryRegistry, MockFactoryRegistry} from 'contracts/test/MockFactoryRegistry.sol';
-import {
-    INonfungiblePositionManager,
-    NonfungiblePositionManager
-} from 'contracts/periphery/NonfungiblePositionManager.sol';
+import {INonfungiblePositionManager, NonfungiblePositionManager} from 'contracts/periphery/NonfungiblePositionManager.sol';
 import {CLGaugeFactory} from 'contracts/gauge/CLGaugeFactory.sol';
 import {CLGauge} from 'contracts/gauge/CLGauge.sol';
 import {MockWETH} from 'contracts/test/MockWETH.sol';
@@ -61,11 +58,7 @@ contract SetupTokens {
     }
 
     // mint either token0 or token1 to a chosen account
-    function mintTo(
-        uint256 _tokenIdx,
-        address _recipient,
-        uint256 _amount
-    ) public {
+    function mintTo(uint256 _tokenIdx, address _recipient, uint256 _amount) public {
         require(_tokenIdx == 0 || _tokenIdx == 1, 'invalid token idx');
         if (_tokenIdx == 0) tokenSetup0.mintTo(_recipient, _amount);
         if (_tokenIdx == 1) tokenSetup1.mintTo(_recipient, _amount);
@@ -217,35 +210,24 @@ contract CLMinter is ERC721Holder {
         rewardToken = _rewardToken;
     }
 
-    function uniswapV3MintCallback(
-        uint256 amount0Owed,
-        uint256 amount1Owed,
-        bytes calldata
-    ) external {
+    function uniswapV3MintCallback(uint256 amount0Owed, uint256 amount1Owed, bytes calldata) external {
         if (amount0Owed > 0) token0.transfer(address(pool), amount0Owed);
         if (amount1Owed > 0) token1.transfer(address(pool), amount1Owed);
     }
 
-    function get_random_decrease_amount(uint128 _seed, uint128 _positionAmount)
-        internal
-        pure
-        returns (uint128 burnAmount)
-    {
+    function get_random_decrease_amount(
+        uint128 _seed,
+        uint128 _positionAmount
+    ) internal pure returns (uint128 burnAmount) {
         burnAmount = _seed % _positionAmount;
         require(burnAmount < _positionAmount);
         require(burnAmount > 0);
     }
 
-    function getTickLiquidityVars(int24 _tickLower, int24 _tickUpper)
-        internal
-        view
-        returns (
-            uint128,
-            int128,
-            uint128,
-            int128
-        )
-    {
+    function getTickLiquidityVars(
+        int24 _tickLower,
+        int24 _tickUpper
+    ) internal view returns (uint128, int128, uint128, int128) {
         (uint128 tL_liqGross, int128 tL_liqNet, , , , , , , , ) = pool.ticks(_tickLower);
         (uint128 tU_liqGross, int128 tU_liqNet, , , , , , , , ) = pool.ticks(_tickUpper);
         return (tL_liqGross, tL_liqNet, tU_liqGross, tU_liqNet);
@@ -271,39 +253,30 @@ contract CLMinter is ERC721Holder {
         int24 _tickUpper,
         uint128 _amount,
         uint160 startingPrice
-    )
-        public
-        returns (
-            MinterStats memory bfre,
-            MinterStats memory aftr,
-            uint256 tokenId
-        )
-    {
+    ) public returns (MinterStats memory bfre, MinterStats memory aftr, uint256 tokenId) {
         bfre = getStats(_tickLower, _tickUpper);
 
-        (uint256 amount0, uint256 amount1) =
-            LiquidityAmounts.getAmountsForLiquidity(
-                startingPrice,
-                TickMath.getSqrtRatioAtTick(_tickLower),
-                TickMath.getSqrtRatioAtTick(_tickUpper),
-                _amount
-            );
+        (uint256 amount0, uint256 amount1) = LiquidityAmounts.getAmountsForLiquidity(
+            startingPrice,
+            TickMath.getSqrtRatioAtTick(_tickLower),
+            TickMath.getSqrtRatioAtTick(_tickUpper),
+            _amount
+        );
 
-        INonfungiblePositionManager.MintParams memory params =
-            INonfungiblePositionManager.MintParams({
-                token0: address(token0),
-                token1: address(token1),
-                tickSpacing: pool.tickSpacing(),
-                tickLower: _tickLower,
-                tickUpper: _tickUpper,
-                recipient: address(this),
-                amount0Desired: amount0,
-                amount1Desired: amount1,
-                amount0Min: 0,
-                amount1Min: 0,
-                deadline: block.timestamp,
-                sqrtPriceX96: 0
-            });
+        INonfungiblePositionManager.MintParams memory params = INonfungiblePositionManager.MintParams({
+            token0: address(token0),
+            token1: address(token1),
+            tickSpacing: pool.tickSpacing(),
+            tickLower: _tickLower,
+            tickUpper: _tickUpper,
+            recipient: address(this),
+            amount0Desired: amount0,
+            amount1Desired: amount1,
+            amount0Min: 0,
+            amount1Min: 0,
+            deadline: block.timestamp,
+            sqrtPriceX96: 0
+        });
 
         (tokenId, , , ) = nft.mint(params);
 
@@ -315,39 +288,30 @@ contract CLMinter is ERC721Holder {
         int24 _tickUpper,
         uint128 _amount,
         uint160 startingPrice
-    )
-        public
-        returns (
-            MinterStats memory bfre,
-            MinterStats memory aftr,
-            uint256 tokenId
-        )
-    {
+    ) public returns (MinterStats memory bfre, MinterStats memory aftr, uint256 tokenId) {
         bfre = getStats(_tickLower, _tickUpper);
 
-        (uint256 amount0, uint256 amount1) =
-            LiquidityAmounts.getAmountsForLiquidity(
-                startingPrice,
-                TickMath.getSqrtRatioAtTick(_tickLower),
-                TickMath.getSqrtRatioAtTick(_tickUpper),
-                _amount
-            );
+        (uint256 amount0, uint256 amount1) = LiquidityAmounts.getAmountsForLiquidity(
+            startingPrice,
+            TickMath.getSqrtRatioAtTick(_tickLower),
+            TickMath.getSqrtRatioAtTick(_tickUpper),
+            _amount
+        );
 
-        INonfungiblePositionManager.MintParams memory params =
-            INonfungiblePositionManager.MintParams({
-                token0: address(token0),
-                token1: address(token1),
-                tickSpacing: pool.tickSpacing(),
-                tickLower: _tickLower,
-                tickUpper: _tickUpper,
-                recipient: address(this),
-                amount0Desired: amount0,
-                amount1Desired: amount1,
-                amount0Min: 0,
-                amount1Min: 0,
-                deadline: block.timestamp,
-                sqrtPriceX96: 0
-            });
+        INonfungiblePositionManager.MintParams memory params = INonfungiblePositionManager.MintParams({
+            token0: address(token0),
+            token1: address(token1),
+            tickSpacing: pool.tickSpacing(),
+            tickLower: _tickLower,
+            tickUpper: _tickUpper,
+            recipient: address(this),
+            amount0Desired: amount0,
+            amount1Desired: amount1,
+            amount0Min: 0,
+            amount1Min: 0,
+            deadline: block.timestamp,
+            sqrtPriceX96: 0
+        });
 
         (tokenId, , , ) = nft.mint(params);
 
@@ -535,11 +499,7 @@ contract CLSwapper {
         gauge = _gauge;
     }
 
-    function uniswapV3SwapCallback(
-        int256 amount0Delta,
-        int256 amount1Delta,
-        bytes calldata
-    ) external {
+    function uniswapV3SwapCallback(int256 amount0Delta, int256 amount1Delta, bytes calldata) external {
         if (amount0Delta > 0) token0.transfer(address(pool), uint256(amount0Delta));
         if (amount1Delta > 0) token1.transfer(address(pool), uint256(amount1Delta));
     }

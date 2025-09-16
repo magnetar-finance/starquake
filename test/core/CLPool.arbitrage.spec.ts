@@ -82,18 +82,13 @@ describe('CLPool arbitrage tests', () => {
             await fix.token0.transfer(arbitrageur.address, BigNumber.from(2).pow(254));
             await fix.token1.transfer(arbitrageur.address, BigNumber.from(2).pow(254));
 
-            const {
-              swapExact0For1,
-              swapToHigherPrice,
-              swapToLowerPrice,
-              swapExact1For0,
-              mint,
-            } = await createPoolFunctions({
-              swapTarget: fix.swapTargetCallee,
-              token0: fix.token0,
-              token1: fix.token1,
-              pool,
-            });
+            const { swapExact0For1, swapToHigherPrice, swapToLowerPrice, swapExact1For0, mint } =
+              await createPoolFunctions({
+                swapTarget: fix.swapTargetCallee,
+                token0: fix.token0,
+                token1: fix.token1,
+                pool,
+              });
 
             const testerFactory = await ethers.getContractFactory('CLPoolSwapTest');
             const tester = (await testerFactory.deploy()) as CLPoolSwapTest;
@@ -131,16 +126,8 @@ describe('CLPool arbitrage tests', () => {
           let tickMath: TickMathTest;
 
           beforeEach('load the fixture', async () => {
-            ({
-              swapExact0For1,
-              pool,
-              mint,
-              swapToHigherPrice,
-              swapToLowerPrice,
-              swapExact1For0,
-              tester,
-              tickMath,
-            } = await loadFixture(arbTestFixture));
+            ({ swapExact0For1, pool, mint, swapToHigherPrice, swapToLowerPrice, swapExact1For0, tester, tickMath } =
+              await loadFixture(arbTestFixture));
           });
 
           async function simulateSwap(

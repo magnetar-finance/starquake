@@ -32,6 +32,11 @@ contract CustomUnstakedFeeModule is ICustomFeeModule {
     /// @inheritdoc IFeeModule
     function getFee(address pool) external view override returns (uint24) {
         uint24 fee = customFee[pool];
-        return fee == ZERO_FEE_INDICATOR ? 0 : fee != 0 ? fee : 100_000; // Default fee is 10%
+        return
+            fee == ZERO_FEE_INDICATOR
+                ? 0
+                : fee != 0
+                    ? fee
+                    : 100_000; // Default fee is 10%
     }
 }

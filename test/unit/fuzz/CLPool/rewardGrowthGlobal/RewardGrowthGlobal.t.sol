@@ -119,9 +119,10 @@ contract RewardGrowthGlobalFuzzTest is CLPoolTest {
         assertLe(gauge.earned(address(users.alice), tokenId), reward1 - (reward1 / (WEEK - delay)) * (WEEK - delay));
     }
 
-    function testFuzz_RewardGrowthGlobalUpdatesCorrectlyWithDelayedRewardDistribute(uint256 reward, uint256 delay)
-        public
-    {
+    function testFuzz_RewardGrowthGlobalUpdatesCorrectlyWithDelayedRewardDistribute(
+        uint256 reward,
+        uint256 delay
+    ) public {
         reward = bound(reward, WEEK, type(uint128).max);
         delay = bound(delay, 1, WEEK - 1 hours);
 
@@ -201,8 +202,11 @@ contract RewardGrowthGlobalFuzzTest is CLPoolTest {
         time = bound(time, 1, WEEK - 2); // WEEK-2 to have at least 1 second with staked liq
         delay = bound(delay, 0, WEEK - time - 1);
 
-        uint256 tokenId =
-            nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(TOKEN_1 * 10, TOKEN_1 * 10, users.alice);
+        uint256 tokenId = nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(
+            TOKEN_1 * 10,
+            TOKEN_1 * 10,
+            users.alice
+        );
 
         // sanity checks
         assertEqUint(pool.liquidity(), 10e18);
@@ -241,8 +245,11 @@ contract RewardGrowthGlobalFuzzTest is CLPoolTest {
         skipToNextEpoch(0);
 
         // mint new position and stake it as well to trigger update
-        uint256 tokenId2 =
-            nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(TOKEN_1 * 10, TOKEN_1 * 10, users.alice);
+        uint256 tokenId2 = nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(
+            TOKEN_1 * 10,
+            TOKEN_1 * 10,
+            users.alice
+        );
         vm.startPrank(users.alice);
         gauge.getReward(tokenId);
 
@@ -311,14 +318,13 @@ contract RewardGrowthGlobalFuzzTest is CLPoolTest {
         time2 = bound(time2, 1, epochDistributionTime - time); // time without stakedLiquidity
 
         // adding 29953549559107810 as amount0 and amount1 will be equal to ~10 liquidity
-        uint256 tokenId =
-            nftCallee.mintNewCustomRangePositionForUserWith60TickSpacing(
-                29953549559107810,
-                29953549559107810,
-                -tickSpacing,
-                tickSpacing,
-                users.alice
-            );
+        uint256 tokenId = nftCallee.mintNewCustomRangePositionForUserWith60TickSpacing(
+            29953549559107810,
+            29953549559107810,
+            -tickSpacing,
+            tickSpacing,
+            users.alice
+        );
 
         nft.approve(address(gauge), tokenId);
         gauge.deposit(tokenId);
@@ -384,14 +390,13 @@ contract RewardGrowthGlobalFuzzTest is CLPoolTest {
         timeWithLiq = bound(timeWithLiq, 1, timeChunkSize - 1);
 
         // adding 29953549559107810 as amount0 and amount1 will be equal to ~10 liquidity
-        uint256 tokenId =
-            nftCallee.mintNewCustomRangePositionForUserWith60TickSpacing(
-                29953549559107810,
-                29953549559107810,
-                -tickSpacing,
-                tickSpacing,
-                users.alice
-            );
+        uint256 tokenId = nftCallee.mintNewCustomRangePositionForUserWith60TickSpacing(
+            29953549559107810,
+            29953549559107810,
+            -tickSpacing,
+            tickSpacing,
+            users.alice
+        );
 
         nft.approve(address(gauge), tokenId);
         gauge.deposit(tokenId);
@@ -467,14 +472,13 @@ contract RewardGrowthGlobalFuzzTest is CLPoolTest {
         nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(TOKEN_1 * 10, TOKEN_1 * 10, users.alice);
 
         // adding 29953549559107810 as amount0 and amount1 will be equal to ~10 liquidity
-        uint256 tokenId =
-            nftCallee.mintNewCustomRangePositionForUserWith60TickSpacing(
-                29953549559107810,
-                29953549559107810,
-                -tickSpacing,
-                tickSpacing,
-                users.alice
-            );
+        uint256 tokenId = nftCallee.mintNewCustomRangePositionForUserWith60TickSpacing(
+            29953549559107810,
+            29953549559107810,
+            -tickSpacing,
+            tickSpacing,
+            users.alice
+        );
         nft.approve(address(gauge), tokenId);
         gauge.deposit(tokenId);
 
@@ -534,8 +538,11 @@ contract RewardGrowthGlobalFuzzTest is CLPoolTest {
         time = bound(time, 1, WEEK - 1);
         delay = bound(delay, 0, WEEK - time);
         time2 = bound(time2, 0, WEEK - 1); // lower bound is 0 to test with and without delayed distribution
-        uint256 tokenId =
-            nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(TOKEN_1 * 10, TOKEN_1 * 10, users.alice);
+        uint256 tokenId = nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(
+            TOKEN_1 * 10,
+            TOKEN_1 * 10,
+            users.alice
+        );
 
         skip(delay);
 
@@ -586,8 +593,11 @@ contract RewardGrowthGlobalFuzzTest is CLPoolTest {
         uint256 epochDistributionTime = WEEK - delay;
         time = bound(time, 1, epochDistributionTime - 1);
         time2 = bound(time2, 1, epochDistributionTime - time);
-        uint256 tokenId =
-            nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(TOKEN_1 * 10, TOKEN_1 * 10, users.alice);
+        uint256 tokenId = nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(
+            TOKEN_1 * 10,
+            TOKEN_1 * 10,
+            users.alice
+        );
 
         skip(delay);
 
@@ -637,8 +647,11 @@ contract RewardGrowthGlobalFuzzTest is CLPoolTest {
         uint256 epochDistributionTime = WEEK - delay;
         time = bound(time, 1, epochDistributionTime - 1);
         time2 = bound(time2, 1, epochDistributionTime - time);
-        uint256 tokenId =
-            nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(TOKEN_1 * 10, TOKEN_1 * 10, users.alice);
+        uint256 tokenId = nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(
+            TOKEN_1 * 10,
+            TOKEN_1 * 10,
+            users.alice
+        );
 
         skip(delay);
 
@@ -758,8 +771,11 @@ contract RewardGrowthGlobalFuzzTest is CLPoolTest {
         // bounding by WEEK - 1 results in large rounding errors in rewardRate when time2 -> WEEK - 1
         time2 = bound(time2, 1, (WEEK * 4) / 5);
 
-        uint256 tokenId =
-            nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(TOKEN_1 * 10, TOKEN_1 * 10, users.alice);
+        uint256 tokenId = nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(
+            TOKEN_1 * 10,
+            TOKEN_1 * 10,
+            users.alice
+        );
 
         skip(delay);
 
@@ -800,8 +816,11 @@ contract RewardGrowthGlobalFuzzTest is CLPoolTest {
         // bounding by WEEK - 1 results in large rounding errors in rewardRate when time2 -> WEEK - 1
         time2 = bound(time2, 1, (WEEK * 4) / 5);
 
-        uint256 tokenId =
-            nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(TOKEN_1 * 10, TOKEN_1 * 10, users.alice);
+        uint256 tokenId = nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(
+            TOKEN_1 * 10,
+            TOKEN_1 * 10,
+            users.alice
+        );
 
         skip(delay);
 
@@ -827,20 +846,18 @@ contract RewardGrowthGlobalFuzzTest is CLPoolTest {
         assertApproxEqAbs(pool.rewardReserve(), rewardRate * time + reward2, 1e6);
     }
 
-    function testFuzz_RewardGrowthEpochSkipped(
-        uint256 reward,
-        uint256 delay,
-        uint256 time,
-        uint256 time2
-    ) public {
+    function testFuzz_RewardGrowthEpochSkipped(uint256 reward, uint256 delay, uint256 time, uint256 time2) public {
         reward = bound(reward, 1 ether, 1_000_000 ether);
         delay = bound(delay, 0, WEEK - 2); // WEEK-2 to have at least 1 sec without staked liq
 
         uint256 epochDistributionTime = WEEK - delay;
         time = bound(time, 1, epochDistributionTime - 1);
         time2 = bound(time2, 0, WEEK - 1); // 0 lower bound covers case where distribution is not delayed
-        uint256 tokenId =
-            nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(TOKEN_1 * 10, TOKEN_1 * 10, users.alice);
+        uint256 tokenId = nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(
+            TOKEN_1 * 10,
+            TOKEN_1 * 10,
+            users.alice
+        );
 
         skip(delay);
 
@@ -895,8 +912,11 @@ contract RewardGrowthGlobalFuzzTest is CLPoolTest {
         time = bound(time, 1, epochDistributionTime - 1);
         time2 = bound(time2, 1, WEEK - 1);
 
-        uint256 tokenId =
-            nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(TOKEN_1 * 10, TOKEN_1 * 10, users.alice);
+        uint256 tokenId = nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(
+            TOKEN_1 * 10,
+            TOKEN_1 * 10,
+            users.alice
+        );
 
         skip(delay);
 

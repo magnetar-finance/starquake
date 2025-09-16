@@ -20,11 +20,7 @@ abstract contract ERC721Permit is BlockTimestamp, ERC721, IERC721Permit {
     bytes32 private immutable versionHash;
 
     /// @notice Computes the nameHash and versionHash
-    constructor(
-        string memory name_,
-        string memory symbol_,
-        string memory version_
-    ) ERC721(name_, symbol_) {
+    constructor(string memory name_, string memory symbol_, string memory version_) ERC721(name_, symbol_) {
         nameHash = keccak256(bytes(name_));
         versionHash = keccak256(bytes(version_));
     }
@@ -60,14 +56,13 @@ abstract contract ERC721Permit is BlockTimestamp, ERC721, IERC721Permit {
     ) external payable override {
         require(_blockTimestamp() <= deadline, 'PE'); // permit expired
 
-        bytes32 digest =
-            keccak256(
-                abi.encodePacked(
-                    '\x19\x01',
-                    DOMAIN_SEPARATOR(),
-                    keccak256(abi.encode(PERMIT_TYPEHASH, spender, tokenId, _getAndIncrementNonce(tokenId), deadline))
-                )
-            );
+        bytes32 digest = keccak256(
+            abi.encodePacked(
+                '\x19\x01',
+                DOMAIN_SEPARATOR(),
+                keccak256(abi.encode(PERMIT_TYPEHASH, spender, tokenId, _getAndIncrementNonce(tokenId), deadline))
+            )
+        );
         address owner = ownerOf(tokenId);
         require(spender != owner, 'ACO'); // approval to current owner
 
