@@ -1,0 +1,66 @@
+[
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "quoteTokenSymbol",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "baseTokenSymbol",
+        "type": "string"
+      },
+      {
+        "internalType": "uint256",
+        "name": "quoteTokensOwed",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "baseTokensOwed",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "tokenId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "int24",
+        "name": "tickLower",
+        "type": "int24"
+      },
+      {
+        "internalType": "int24",
+        "name": "tickUpper",
+        "type": "int24"
+      },
+      {
+        "internalType": "int24",
+        "name": "tickSpacing",
+        "type": "int24"
+      },
+      {
+        "internalType": "uint8",
+        "name": "quoteTokenDecimals",
+        "type": "uint8"
+      },
+      {
+        "internalType": "uint8",
+        "name": "baseTokenDecimals",
+        "type": "uint8"
+      }
+    ],
+    "name": "generateSVG",
+    "outputs": [
+      {
+        "internalType": "string",
+        "name": "svg",
+        "type": "string"
+      }
+    ],
+    "stateMutability": "pure",
+    "type": "function"
+  }
+]

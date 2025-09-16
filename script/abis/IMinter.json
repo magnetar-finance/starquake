@@ -1,0 +1,15 @@
+[
+  {
+    "inputs": [],
+    "name": "updatePeriod",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "_period",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }
+]
