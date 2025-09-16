@@ -8,11 +8,7 @@ import {IFactoryRegistry} from 'contracts/core/interfaces/IFactoryRegistry.sol';
 interface IVoter {
     function ve() external view returns (IVotingEscrow);
 
-    function vote(
-        uint256 _tokenId,
-        address[] calldata _poolVote,
-        uint256[] calldata _weights
-    ) external;
+    function vote(uint256 _tokenId, address[] calldata _poolVote, uint256[] calldata _weights) external;
 
     function gauges(address _pool) external view returns (address);
 
@@ -45,9 +41,5 @@ interface IVoter {
     /// @param _fees    Array of FeesVotingReward contracts to collect from.
     /// @param _tokens  Array of tokens that are used as fees.
     /// @param _tokenId Id of veNFT that you wish to claim fees for.
-    function claimFees(
-        address[] memory _fees,
-        address[][] memory _tokens,
-        uint256 _tokenId
-    ) external;
+    function claimFees(address[] memory _fees, address[][] memory _tokens, uint256 _tokenId) external;
 }

@@ -35,8 +35,12 @@ abstract contract PoolUtils is Test, Constants, Events {
         int24 tickSpacing,
         uint160 sqrtPriceX96
     ) internal returns (address _pool) {
-        address create2Addr =
-            computeAddress({factory: address(factory), tokenA: token0, tokenB: token1, tickSpacing: tickSpacing});
+        address create2Addr = computeAddress({
+            factory: address(factory),
+            tokenA: token0,
+            tokenB: token1,
+            tickSpacing: tickSpacing
+        });
 
         vm.expectEmit(true, true, true, true, address(factory));
         emit PoolCreated({token0: TEST_TOKEN_0, token1: TEST_TOKEN_1, tickSpacing: tickSpacing, pool: create2Addr});
@@ -62,7 +66,7 @@ abstract contract PoolUtils is Test, Constants, Events {
     }
 
     function encodePriceSqrt(uint256 reserve1, uint256 reserve0) public pure returns (uint160) {
-        reserve1 = reserve1 * 2**192;
+        reserve1 = reserve1 * 2 ** 192;
         uint256 division = reserve1 / reserve0;
         uint256 sqrtX96 = sqrt(division);
 
@@ -70,7 +74,7 @@ abstract contract PoolUtils is Test, Constants, Events {
     }
 
     function getScaledExecutionPrice(int256 poolBalance1Delta, int256 poolBalance0Delta) public pure returns (int256) {
-        return ((poolBalance1Delta * 10**39) / poolBalance0Delta) * -1;
+        return ((poolBalance1Delta * 10 ** 39) / poolBalance0Delta) * -1;
     }
 
     // @dev converts positive numbers to string

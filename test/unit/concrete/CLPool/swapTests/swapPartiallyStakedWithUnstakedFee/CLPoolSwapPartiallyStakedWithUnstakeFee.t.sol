@@ -17,13 +17,12 @@ abstract contract CLPoolSwapPartiallyStakedWithUnstakeFeeTest is CLPoolSwapTests
         super.setUp();
 
         string memory root = vm.projectRoot();
-        string memory path =
-            string(
-                abi.encodePacked(
-                    root,
-                    '/test/unit/concrete/CLPool/swapTests/swapPartiallyStakedWithUnstakedFee/swap_assert_partially_staked_with_fee.json'
-                )
-            );
+        string memory path = string(
+            abi.encodePacked(
+                root,
+                '/test/unit/concrete/CLPool/swapTests/swapPartiallyStakedWithUnstakedFee/swap_assert_partially_staked_with_fee.json'
+            )
+        );
 
         jsonConstants = vm.readFile(path);
 
@@ -70,12 +69,9 @@ abstract contract CLPoolSwapPartiallyStakedWithUnstakeFeeTest is CLPoolSwapTests
         for (uint256 i = 0; i < positionsLength; i++) {
             Position memory position = stakedPositions[i];
 
-            (uint128 liquidity, , , , ) =
-                CLPool(poolSetup.pool).positions(
-                    keccak256(
-                        abi.encodePacked(poolSetup.gauge, getMinTick(TICK_SPACING_60), getMaxTick(TICK_SPACING_60))
-                    )
-                );
+            (uint128 liquidity, , , , ) = CLPool(poolSetup.pool).positions(
+                keccak256(abi.encodePacked(poolSetup.gauge, getMinTick(TICK_SPACING_60), getMaxTick(TICK_SPACING_60)))
+            );
 
             CLPool(poolSetup.pool).burn(position.tickLower, position.tickUpper, liquidity, poolSetup.gauge);
             CLPool(poolSetup.pool).collect(
@@ -99,10 +95,9 @@ abstract contract CLPoolSwapPartiallyStakedWithUnstakeFeeTest is CLPoolSwapTests
         for (uint256 i = 0; i < positionsLength; i++) {
             Position memory position = unstakedPositions[i];
 
-            (uint128 liquidity, , , , ) =
-                CLPool(poolSetup.pool).positions(
-                    keccak256(abi.encodePacked(address(nft), getMinTick(TICK_SPACING_60), getMaxTick(TICK_SPACING_60)))
-                );
+            (uint128 liquidity, , , , ) = CLPool(poolSetup.pool).positions(
+                keccak256(abi.encodePacked(address(nft), getMinTick(TICK_SPACING_60), getMaxTick(TICK_SPACING_60)))
+            );
 
             CLPool(poolSetup.pool).burn(position.tickLower, position.tickUpper, liquidity, address(nft));
             CLPool(poolSetup.pool).collect(

@@ -16,13 +16,12 @@ abstract contract CLPoolSwapAllStakedNoUnstakeFeeTest is CLPoolSwapTests {
         super.setUp();
 
         string memory root = vm.projectRoot();
-        string memory path =
-            string(
-                abi.encodePacked(
-                    root,
-                    '/test/unit/concrete/CLPool/swapTests/swapAllStakedNoUnstakedFee/swap_assert_all_staked.json'
-                )
-            );
+        string memory path = string(
+            abi.encodePacked(
+                root,
+                '/test/unit/concrete/CLPool/swapTests/swapAllStakedNoUnstakedFee/swap_assert_all_staked.json'
+            )
+        );
 
         jsonConstants = vm.readFile(path);
 

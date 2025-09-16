@@ -36,26 +36,24 @@ contract EarnedTest is CLGaugeTest {
     function testFuzz_EarnedReturnsSameAsGetRewardsWithMultipleDepositors(uint256 reward) public {
         reward = bound(reward, WEEK, type(uint128).max);
 
-        uint256 aliceTokenId =
-            nftCallee.mintNewCustomRangePositionForUserWith60TickSpacing(
-                TOKEN_1,
-                TOKEN_1,
-                -TICK_SPACING_60,
-                TICK_SPACING_60,
-                users.alice
-            );
+        uint256 aliceTokenId = nftCallee.mintNewCustomRangePositionForUserWith60TickSpacing(
+            TOKEN_1,
+            TOKEN_1,
+            -TICK_SPACING_60,
+            TICK_SPACING_60,
+            users.alice
+        );
 
         nft.approve(address(gauge), aliceTokenId);
         gauge.deposit(aliceTokenId);
 
-        uint256 bobTokenId =
-            nftCallee.mintNewCustomRangePositionForUserWith60TickSpacing(
-                TOKEN_1,
-                TOKEN_1,
-                -TICK_SPACING_60,
-                TICK_SPACING_60,
-                users.bob
-            );
+        uint256 bobTokenId = nftCallee.mintNewCustomRangePositionForUserWith60TickSpacing(
+            TOKEN_1,
+            TOKEN_1,
+            -TICK_SPACING_60,
+            TICK_SPACING_60,
+            users.bob
+        );
 
         vm.startPrank(users.bob);
 
@@ -106,26 +104,24 @@ contract EarnedTest is CLGaugeTest {
         reward = bound(reward, WEEK, type(uint128).max);
         reward2 = bound(reward, WEEK, type(uint128).max);
 
-        uint256 aliceTokenId =
-            nftCallee.mintNewCustomRangePositionForUserWith60TickSpacing(
-                TOKEN_1,
-                TOKEN_1,
-                -TICK_SPACING_60,
-                TICK_SPACING_60,
-                users.alice
-            );
+        uint256 aliceTokenId = nftCallee.mintNewCustomRangePositionForUserWith60TickSpacing(
+            TOKEN_1,
+            TOKEN_1,
+            -TICK_SPACING_60,
+            TICK_SPACING_60,
+            users.alice
+        );
 
         nft.approve(address(gauge), aliceTokenId);
         gauge.deposit(aliceTokenId);
 
-        uint256 bobTokenId =
-            nftCallee.mintNewCustomRangePositionForUserWith60TickSpacing(
-                TOKEN_1,
-                TOKEN_1,
-                -TICK_SPACING_60,
-                TICK_SPACING_60,
-                users.bob
-            );
+        uint256 bobTokenId = nftCallee.mintNewCustomRangePositionForUserWith60TickSpacing(
+            TOKEN_1,
+            TOKEN_1,
+            -TICK_SPACING_60,
+            TICK_SPACING_60,
+            users.bob
+        );
 
         vm.startPrank(users.bob);
 
@@ -193,14 +189,13 @@ contract EarnedTest is CLGaugeTest {
     function testFuzz_EarnedReturnsSameAsGetRewardsWithStaggeredDepositsAndWithdrawals(uint256 reward) public {
         reward = bound(reward, WEEK, type(uint128).max);
 
-        uint256 aliceTokenId =
-            nftCallee.mintNewCustomRangePositionForUserWith60TickSpacing(
-                TOKEN_1,
-                TOKEN_1,
-                -TICK_SPACING_60,
-                TICK_SPACING_60,
-                users.alice
-            );
+        uint256 aliceTokenId = nftCallee.mintNewCustomRangePositionForUserWith60TickSpacing(
+            TOKEN_1,
+            TOKEN_1,
+            -TICK_SPACING_60,
+            TICK_SPACING_60,
+            users.alice
+        );
 
         nft.approve(address(gauge), aliceTokenId);
         gauge.deposit({tokenId: aliceTokenId});
@@ -217,14 +212,13 @@ contract EarnedTest is CLGaugeTest {
         // should be the same
         assertEq(rewardToken.balanceOf(users.alice), aliceClaimableFirst);
 
-        uint256 bobTokenId =
-            nftCallee.mintNewCustomRangePositionForUserWith60TickSpacing(
-                TOKEN_1,
-                TOKEN_1,
-                -TICK_SPACING_60,
-                TICK_SPACING_60,
-                users.bob
-            );
+        uint256 bobTokenId = nftCallee.mintNewCustomRangePositionForUserWith60TickSpacing(
+            TOKEN_1,
+            TOKEN_1,
+            -TICK_SPACING_60,
+            TICK_SPACING_60,
+            users.bob
+        );
 
         vm.startPrank(users.bob);
 

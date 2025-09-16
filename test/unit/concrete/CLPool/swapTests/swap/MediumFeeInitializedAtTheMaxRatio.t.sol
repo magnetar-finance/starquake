@@ -13,13 +13,12 @@ contract MediumFeeInitializedAtTheMaxRatioTest is CLPoolSwapNoStakeTest {
         uint160 startingPrice = MAX_SQRT_RATIO - 1;
 
         string memory poolName = '.initialized_at_the_max_ratio';
-        address pool =
-            poolFactory.createPool({
-                tokenA: address(token0),
-                tokenB: address(token1),
-                tickSpacing: tickSpacing,
-                sqrtPriceX96: startingPrice
-            });
+        address pool = poolFactory.createPool({
+            tokenA: address(token0),
+            tokenB: address(token1),
+            tickSpacing: tickSpacing,
+            sqrtPriceX96: startingPrice
+        });
 
         uint128 liquidity = 2e18;
 

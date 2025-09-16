@@ -57,8 +57,11 @@ contract FlashTest is CLPoolTest {
     // All position staked tests
 
     function test_FlashIncreasesGaugeFeesByExpectedAmountAllPositionsStaked() public {
-        uint256 tokenId =
-            nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(TOKEN_1 * 2, TOKEN_1 * 2, users.alice);
+        uint256 tokenId = nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(
+            TOKEN_1 * 2,
+            TOKEN_1 * 2,
+            users.alice
+        );
 
         nft.approve(address(gauge), tokenId);
         gauge.deposit(tokenId);
@@ -79,8 +82,11 @@ contract FlashTest is CLPoolTest {
     }
 
     function test_FlashAllowsDonatingToken0AllPositionsStaked() public {
-        uint256 tokenId =
-            nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(TOKEN_1 * 2, TOKEN_1 * 2, users.alice);
+        uint256 tokenId = nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(
+            TOKEN_1 * 2,
+            TOKEN_1 * 2,
+            users.alice
+        );
 
         nft.approve(address(gauge), tokenId);
         gauge.deposit(tokenId);
@@ -98,8 +104,11 @@ contract FlashTest is CLPoolTest {
     }
 
     function test_FlashAllowsDonatingToken1AllPositionsStaked() public {
-        uint256 tokenId =
-            nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(TOKEN_1 * 2, TOKEN_1 * 2, users.alice);
+        uint256 tokenId = nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(
+            TOKEN_1 * 2,
+            TOKEN_1 * 2,
+            users.alice
+        );
 
         nft.approve(address(gauge), tokenId);
         gauge.deposit(tokenId);
@@ -117,8 +126,11 @@ contract FlashTest is CLPoolTest {
     }
 
     function test_FlashAllowsDonatingToken0AndToken1AllPositionsStaked() public {
-        uint256 tokenId =
-            nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(TOKEN_1 * 2, TOKEN_1 * 2, users.alice);
+        uint256 tokenId = nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(
+            TOKEN_1 * 2,
+            TOKEN_1 * 2,
+            users.alice
+        );
 
         nft.approve(address(gauge), tokenId);
         gauge.deposit(tokenId);

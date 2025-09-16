@@ -42,12 +42,7 @@ contract CalculateFeesFuzzTest is CLPoolTest {
         deal({token: address(token1), to: users.alice, give: TOKEN_1 * 1000000});
     }
 
-    function assertFees(
-        uint256 t0,
-        uint256 t1,
-        uint256 fg0,
-        uint256 fg1
-    ) internal {
+    function assertFees(uint256 t0, uint256 t1, uint256 fg0, uint256 fg1) internal {
         (uint256 _token0, uint256 _token1) = pool.gaugeFees();
         assertApproxEqAbs(_token0, t0, 2);
         assertApproxEqAbs(_token1, t1, 2);
@@ -68,11 +63,17 @@ contract CalculateFeesFuzzTest is CLPoolTest {
         liquidity1 = bound(liquidity1, TOKEN_1 * 10, type(uint64).max);
         liquidity2 = bound(liquidity2, TOKEN_1 * 10, type(uint64).max);
 
-        uint256 tokenId =
-            nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(liquidity1, liquidity1, users.alice);
+        uint256 tokenId = nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(
+            liquidity1,
+            liquidity1,
+            users.alice
+        );
 
-        uint256 tokenId2 =
-            nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(liquidity2, liquidity2, users.alice);
+        uint256 tokenId2 = nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(
+            liquidity2,
+            liquidity2,
+            users.alice
+        );
 
         nft.approve(address(gauge), tokenId);
         gauge.deposit(tokenId);
@@ -166,8 +167,11 @@ contract CalculateFeesFuzzTest is CLPoolTest {
 
         uint256 tokenId = nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(liquidity, liquidity, users.alice);
 
-        uint256 tokenId2 =
-            nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(liquidity, liquidity, users.alice);
+        uint256 tokenId2 = nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(
+            liquidity,
+            liquidity,
+            users.alice
+        );
 
         nft.approve(address(gauge), tokenId);
         gauge.deposit(tokenId);
@@ -270,11 +274,17 @@ contract CalculateFeesFuzzTest is CLPoolTest {
         fd.swapAmount3 = bound(swapAmount3, 10_000, 100_000);
         fd.swapAmount4 = bound(swapAmount4, 10_000, 100_000);
 
-        uint256 tokenId =
-            nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(fd.liquidity1, fd.liquidity1, users.alice);
+        uint256 tokenId = nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(
+            fd.liquidity1,
+            fd.liquidity1,
+            users.alice
+        );
 
-        uint256 tokenId2 =
-            nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(fd.liquidity2, fd.liquidity2, users.alice);
+        uint256 tokenId2 = nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(
+            fd.liquidity2,
+            fd.liquidity2,
+            users.alice
+        );
 
         nft.approve(address(gauge), tokenId);
         gauge.deposit(tokenId);
@@ -347,10 +357,16 @@ contract CalculateFeesFuzzTest is CLPoolTest {
             nft.approve(address(nftCallee), tokenId2);
             (uint256 amount0TokenId2, uint256 amountTtokenId2) = nftCallee.collectAllForTokenId(tokenId2, users.alice);
 
-            uint256 token0FeeDuringSwapForTokenId2 =
-                FullMath.mulDiv(fees.fee2, fd.liquidity2, (fd.liquidity1 + fd.liquidity2));
-            uint256 token1FeeDuringSwapForTokenId2 =
-                FullMath.mulDiv(fees.fee3, fd.liquidity2, (fd.liquidity1 + fd.liquidity2));
+            uint256 token0FeeDuringSwapForTokenId2 = FullMath.mulDiv(
+                fees.fee2,
+                fd.liquidity2,
+                (fd.liquidity1 + fd.liquidity2)
+            );
+            uint256 token1FeeDuringSwapForTokenId2 = FullMath.mulDiv(
+                fees.fee3,
+                fd.liquidity2,
+                (fd.liquidity1 + fd.liquidity2)
+            );
 
             assertApproxEqAbs(amount0TokenId2, unstakedFeeDuringSwap + token0FeeDuringSwapForTokenId2, 2);
             assertApproxEqAbs(amountTtokenId2, unstakedFeeDuringSwap2 + token1FeeDuringSwapForTokenId2, 2);

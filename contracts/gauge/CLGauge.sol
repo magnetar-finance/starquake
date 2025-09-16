@@ -100,11 +100,7 @@ contract CLGauge is ICLGauge, ERC721Holder, ReentrancyGuard {
     }
 
     // updates the claimable rewards and lastUpdateTime for tokenId
-    function _updateRewards(
-        uint256 tokenId,
-        int24 tickLower,
-        int24 tickUpper
-    ) internal {
+    function _updateRewards(uint256 tokenId, int24 tickLower, int24 tickUpper) internal {
         if (lastUpdateTime[tokenId] == block.timestamp) return;
         else {
             pool.updateRewardsGrowthGlobal();
@@ -140,13 +136,16 @@ contract CLGauge is ICLGauge, ERC721Holder, ReentrancyGuard {
         uint256 rewardPerTokenInsideInitialX128 = rewardGrowthInside[tokenId];
         uint256 rewardPerTokenInsideX128 = pool.getRewardGrowthInside(tickLower, tickUpper, rewardGrowthGlobalX128);
 
-        uint256 claimable =
-            FullMath.mulDiv(rewardPerTokenInsideX128 - rewardPerTokenInsideInitialX128, liquidity, FixedPoint128.Q128);
+        uint256 claimable = FullMath.mulDiv(
+            rewardPerTokenInsideX128 - rewardPerTokenInsideInitialX128,
+            liquidity,
+            FixedPoint128.Q128
+        );
         return claimable;
     }
 
     /// @inheritdoc ICLGauge
-    function getReward(address account) external override nonReentrant onlyVoter() {
+    function getReward(address account) external override nonReentrant onlyVoter {
         uint256[] memory tokenIds = _stakes[account].values();
         uint256 length = tokenIds.length;
         uint256 tokenId;
@@ -167,12 +166,7 @@ contract CLGauge is ICLGauge, ERC721Holder, ReentrancyGuard {
         _getReward(tickLower, tickUpper, tokenId, msg.sender);
     }
 
-    function _getReward(
-        int24 tickLower,
-        int24 tickUpper,
-        uint256 tokenId,
-        address owner
-    ) internal {
+    function _getReward(int24 tickLower, int24 tickUpper, uint256 tokenId, address owner) internal {
         _updateRewards(tokenId, tickLower, tickUpper);
 
         uint256 reward = rewards[tokenId];
@@ -188,8 +182,8 @@ contract CLGauge is ICLGauge, ERC721Holder, ReentrancyGuard {
     function deposit(uint256 tokenId) external override nonReentrant {
         require(nft.ownerOf(tokenId) == msg.sender, 'NA');
         require(voter.isAlive(address(this)), 'GK');
-        (, , address _token0, address _token1, int24 _tickSpacing, int24 tickLower, int24 tickUpper, , , , , ) =
-            nft.positions(tokenId);
+        (, , address _token0, address _token1, int24 _tickSpacing, int24 tickLower, int24 tickUpper, , , , , ) = nft
+            .positions(tokenId);
         require(token0 == _token0 && token1 == _token1 && tickSpacing == _tickSpacing, 'PM');
 
         // trigger update on staked position so NFT will be in sync with the pool
@@ -275,7 +269,7 @@ contract CLGauge is ICLGauge, ERC721Holder, ReentrancyGuard {
     }
 
     /// @inheritdoc ICLGauge
-    function notifyRewardAmount(uint256 _amount) external override nonReentrant onlyVoter() {
+    function notifyRewardAmount(uint256 _amount) external override nonReentrant onlyVoter {
         address sender = msg.sender;
         require(_amount != 0, 'ZR');
         _claimFees();

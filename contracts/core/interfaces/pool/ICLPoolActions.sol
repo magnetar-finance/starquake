@@ -98,11 +98,7 @@ interface ICLPoolActions {
     /// @param amount How much liquidity to burn
     /// @return amount0 The amount of token0 sent to the recipient
     /// @return amount1 The amount of token1 sent to the recipient
-    function burn(
-        int24 tickLower,
-        int24 tickUpper,
-        uint128 amount
-    ) external returns (uint256 amount0, uint256 amount1);
+    function burn(int24 tickLower, int24 tickUpper, uint128 amount) external returns (uint256 amount0, uint256 amount1);
 
     /// @notice Burn liquidity from the supplied owner and account tokens owed for the liquidity to the position
     /// @dev Can be used to trigger a recalculation of fees owed to a position by calling with an amount of 0
@@ -126,12 +122,7 @@ interface ICLPoolActions {
     /// @param tickLower The lower tick of the position for which to stake liquidity
     /// @param tickUpper The upper tick of the position for which to stake liquidity
     /// @param positionUpdate If the nft and gauge position should be updated
-    function stake(
-        int128 stakedLiquidityDelta,
-        int24 tickLower,
-        int24 tickUpper,
-        bool positionUpdate
-    ) external;
+    function stake(int128 stakedLiquidityDelta, int24 tickLower, int24 tickUpper, bool positionUpdate) external;
 
     /// @notice Swap token0 for token1, or token1 for token0
     /// @dev The caller of this method receives a callback in the form of ICLSwapCallback#uniswapV3SwapCallback
@@ -159,12 +150,7 @@ interface ICLPoolActions {
     /// @param amount0 The amount of token0 to send
     /// @param amount1 The amount of token1 to send
     /// @param data Any data to be passed through to the callback
-    function flash(
-        address recipient,
-        uint256 amount0,
-        uint256 amount1,
-        bytes calldata data
-    ) external;
+    function flash(address recipient, uint256 amount0, uint256 amount1, bytes calldata data) external;
 
     /// @notice Increase the maximum number of price and liquidity observations that this pool will store
     /// @dev This method is no-op if the pool already has an observationCardinalityNext greater than or equal to
@@ -180,9 +166,5 @@ interface ICLPoolActions {
     /// @param rewardRate the rate rewards being distributed during the epoch
     /// @param rewardReserve the available rewards to be distributed during the epoch
     /// @param periodFinish the end of the current period of rewards, updated once per epoch
-    function syncReward(
-        uint256 rewardRate,
-        uint256 rewardReserve,
-        uint256 periodFinish
-    ) external;
+    function syncReward(uint256 rewardRate, uint256 rewardReserve, uint256 periodFinish) external;
 }

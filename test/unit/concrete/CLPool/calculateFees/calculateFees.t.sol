@@ -36,12 +36,7 @@ contract CalculateFeesTest is CLPoolTest {
         skipToNextEpoch(0);
     }
 
-    function assertFees(
-        uint256 t0,
-        uint256 t1,
-        uint256 fg0,
-        uint256 fg1
-    ) internal {
+    function assertFees(uint256 t0, uint256 t1, uint256 fg0, uint256 fg1) internal {
         (uint256 _token0, uint256 _token1) = pool.gaugeFees();
         assertApproxEqAbs(_token0, t0, 2);
         assertApproxEqAbs(_token1, t1, 2);
@@ -54,8 +49,11 @@ contract CalculateFeesTest is CLPoolTest {
     }
 
     function test_FeesCalculatedCorrectlyDuringSwapsAllFullRangePositionsStaked() public {
-        uint256 tokenId =
-            nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(TOKEN_1 * 10, TOKEN_1 * 10, users.alice);
+        uint256 tokenId = nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(
+            TOKEN_1 * 10,
+            TOKEN_1 * 10,
+            users.alice
+        );
 
         nft.approve(address(gauge), tokenId);
         gauge.deposit(tokenId);
@@ -88,11 +86,17 @@ contract CalculateFeesTest is CLPoolTest {
     function test_FeesCalculatedCorrectlyDuringSwapsFullRangePositionsPartiallyStaked() public {
         uint256 liquidity = TOKEN_1 * 10;
 
-        uint256 tokenId =
-            nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(TOKEN_1 * 10, TOKEN_1 * 10, users.alice);
+        uint256 tokenId = nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(
+            TOKEN_1 * 10,
+            TOKEN_1 * 10,
+            users.alice
+        );
 
-        uint256 tokenId2 =
-            nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(TOKEN_1 * 10, TOKEN_1 * 10, users.alice);
+        uint256 tokenId2 = nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(
+            TOKEN_1 * 10,
+            TOKEN_1 * 10,
+            users.alice
+        );
 
         nft.approve(address(gauge), tokenId);
         gauge.deposit(tokenId);
@@ -144,11 +148,17 @@ contract CalculateFeesTest is CLPoolTest {
     {
         uint256 liquidity = TOKEN_1 * 10;
 
-        uint256 tokenId =
-            nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(TOKEN_1 * 10, TOKEN_1 * 10, users.alice);
+        uint256 tokenId = nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(
+            TOKEN_1 * 10,
+            TOKEN_1 * 10,
+            users.alice
+        );
 
-        uint256 tokenId2 =
-            nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(TOKEN_1 * 10, TOKEN_1 * 10, users.alice);
+        uint256 tokenId2 = nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(
+            TOKEN_1 * 10,
+            TOKEN_1 * 10,
+            users.alice
+        );
 
         nft.approve(address(gauge), tokenId);
         gauge.deposit(tokenId);
@@ -206,11 +216,17 @@ contract CalculateFeesTest is CLPoolTest {
     function test_FeesCalculatedCorrectlyDuringSwapsFullRangePositionsIntermediaryUnstakeAndStake() public {
         uint256 liquidity = TOKEN_1 * 10;
 
-        uint256 tokenId =
-            nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(TOKEN_1 * 10, TOKEN_1 * 10, users.alice);
+        uint256 tokenId = nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(
+            TOKEN_1 * 10,
+            TOKEN_1 * 10,
+            users.alice
+        );
 
-        uint256 tokenId2 =
-            nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(TOKEN_1 * 10, TOKEN_1 * 10, users.alice);
+        uint256 tokenId2 = nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(
+            TOKEN_1 * 10,
+            TOKEN_1 * 10,
+            users.alice
+        );
 
         nft.approve(address(gauge), tokenId);
         gauge.deposit(tokenId);
@@ -266,17 +282,19 @@ contract CalculateFeesTest is CLPoolTest {
         uint256 liquidity = TOKEN_1 * 10;
 
         // adding 29953549559107810 as amount0 and amount1 will be equal to ~10 liquidity
-        uint256 tokenId =
-            nftCallee.mintNewCustomRangePositionForUserWith60TickSpacing(
-                29953549559107810,
-                29953549559107810,
-                -TICK_SPACING_60,
-                TICK_SPACING_60,
-                users.alice
-            );
+        uint256 tokenId = nftCallee.mintNewCustomRangePositionForUserWith60TickSpacing(
+            29953549559107810,
+            29953549559107810,
+            -TICK_SPACING_60,
+            TICK_SPACING_60,
+            users.alice
+        );
 
-        uint256 tokenId2 =
-            nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(TOKEN_1 * 10, TOKEN_1 * 10, users.alice);
+        uint256 tokenId2 = nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(
+            TOKEN_1 * 10,
+            TOKEN_1 * 10,
+            users.alice
+        );
 
         nft.approve(address(gauge), tokenId);
         gauge.deposit(tokenId);
@@ -295,11 +313,10 @@ contract CalculateFeesTest is CLPoolTest {
         // sqrtPriceStartX96
         uint160 sqrtRatioBX96 = encodePriceSqrt(1, 1);
         // liquidity * (sqrt(upper) - sqrt(lower)) / (sqrt(upper) * sqrt(lower))
-        uint256 amountIn =
-            UnsafeMath.divRoundingUp(
-                FullMath.mulDivRoundingUp(uint256(liquidity * 2) << 96, sqrtRatioBX96 - sqrtRatioAX96, sqrtRatioBX96),
-                sqrtRatioAX96
-            );
+        uint256 amountIn = UnsafeMath.divRoundingUp(
+            FullMath.mulDivRoundingUp(uint256(liquidity * 2) << 96, sqrtRatioBX96 - sqrtRatioAX96, sqrtRatioBX96),
+            sqrtRatioAX96
+        );
 
         uint256 feeInStakedRange = FullMath.mulDivRoundingUp(amountIn, 3_000, 1e6 - 3_000);
 
@@ -330,8 +347,10 @@ contract CalculateFeesTest is CLPoolTest {
 
         uint256 feeGrowthGlobal1X128InUnStakedRange = calculateFeeGrowthX128(feeInUnStakedRange, liquidity);
 
-        uint256 feeGrowthGlobal1X128StakedRange =
-            calculateFeeGrowthX128((totalFeeOnSwap - feeInUnStakedRange) / 2, liquidity);
+        uint256 feeGrowthGlobal1X128StakedRange = calculateFeeGrowthX128(
+            (totalFeeOnSwap - feeInUnStakedRange) / 2,
+            liquidity
+        );
 
         assertFees(
             feeInStakedRange / 2,

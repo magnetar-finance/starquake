@@ -38,19 +38,11 @@ contract MixedRouteQuoterV1 is IMixedRouteQuoterV1, ICLSwapCallback, PeripheryIm
     /// @dev Transient storage variable used to check a safety condition in exact output swaps.
     uint256 private amountOutCached;
 
-    constructor(
-        address _factory,
-        address _factoryV2,
-        address _WETH9
-    ) PeripheryImmutableState(_factory, _WETH9) {
+    constructor(address _factory, address _factoryV2, address _WETH9) PeripheryImmutableState(_factory, _WETH9) {
         factoryV2 = _factoryV2;
     }
 
-    function getPool(
-        address tokenA,
-        address tokenB,
-        int24 tickSpacing
-    ) private view returns (ICLPool) {
+    function getPool(address tokenA, address tokenB, int24 tickSpacing) private view returns (ICLPool) {
         return ICLPool(ICLFactory(factory).getPool(tokenA, tokenB, tickSpacing));
     }
 
@@ -68,19 +60,14 @@ contract MixedRouteQuoterV1 is IMixedRouteQuoterV1, ICLSwapCallback, PeripheryIm
     }
 
     /// @inheritdoc ICLSwapCallback
-    function uniswapV3SwapCallback(
-        int256 amount0Delta,
-        int256 amount1Delta,
-        bytes memory path
-    ) external view override {
+    function uniswapV3SwapCallback(int256 amount0Delta, int256 amount1Delta, bytes memory path) external view override {
         require(amount0Delta > 0 || amount1Delta > 0); // swaps entirely within 0-liquidity regions are not supported
         (address tokenIn, address tokenOut, int24 tickSpacing) = path.decodeFirstPool();
         CallbackValidation.verifyCallback(factory, tokenIn, tokenOut, tickSpacing);
 
-        (bool isExactInput, uint256 amountReceived) =
-            amount0Delta > 0
-                ? (tokenIn < tokenOut, uint256(-amount1Delta))
-                : (tokenOut < tokenIn, uint256(-amount0Delta));
+        (bool isExactInput, uint256 amountReceived) = amount0Delta > 0
+            ? (tokenIn < tokenOut, uint256(-amount1Delta))
+            : (tokenOut < tokenIn, uint256(-amount0Delta));
 
         ICLPool pool = getPool(tokenIn, tokenOut, tickSpacing);
         (uint160 v3SqrtPriceX96After, int24 tickAfter, , , , ) = pool.slot0();
@@ -100,15 +87,9 @@ contract MixedRouteQuoterV1 is IMixedRouteQuoterV1, ICLSwapCallback, PeripheryIm
     }
 
     /// @dev Parses a revert reason that should contain the numeric quote
-    function parseRevertReason(bytes memory reason)
-        private
-        pure
-        returns (
-            uint256 amount,
-            uint160 sqrtPriceX96After,
-            int24 tickAfter
-        )
-    {
+    function parseRevertReason(
+        bytes memory reason
+    ) private pure returns (uint256 amount, uint160 sqrtPriceX96After, int24 tickAfter) {
         if (reason.length != 0x60) {
             if (reason.length < 0x44) revert('Unexpected error');
             assembly {
@@ -123,16 +104,7 @@ contract MixedRouteQuoterV1 is IMixedRouteQuoterV1, ICLSwapCallback, PeripheryIm
         bytes memory reason,
         ICLPool pool,
         uint256 gasEstimate
-    )
-        private
-        view
-        returns (
-            uint256 amount,
-            uint160 sqrtPriceX96After,
-            uint32 initializedTicksCrossed,
-            uint256
-        )
-    {
+    ) private view returns (uint256 amount, uint160 sqrtPriceX96After, uint32 initializedTicksCrossed, uint256) {
         int24 tickBefore;
         int24 tickAfter;
         (, tickBefore, , , , ) = pool.slot0();
@@ -144,15 +116,12 @@ contract MixedRouteQuoterV1 is IMixedRouteQuoterV1, ICLSwapCallback, PeripheryIm
     }
 
     /// @dev Fetch an exactIn quote for a V3 Pool on chain
-    function quoteExactInputSingleV3(QuoteExactInputSingleV3Params memory params)
+    function quoteExactInputSingleV3(
+        QuoteExactInputSingleV3Params memory params
+    )
         public
         override
-        returns (
-            uint256 amountOut,
-            uint160 sqrtPriceX96After,
-            uint32 initializedTicksCrossed,
-            uint256 gasEstimate
-        )
+        returns (uint256 amountOut, uint160 sqrtPriceX96After, uint32 initializedTicksCrossed, uint256 gasEstimate)
     {
         bool zeroForOne = params.tokenIn < params.tokenOut;
         ICLPool pool = getPool(params.tokenIn, params.tokenOut, params.tickSpacing);
@@ -176,12 +145,9 @@ contract MixedRouteQuoterV1 is IMixedRouteQuoterV1, ICLSwapCallback, PeripheryIm
     }
 
     /// @dev Fetch an exactIn quote for a V2 pair on chain
-    function quoteExactInputSingleV2(QuoteExactInputSingleV2Params memory params)
-        public
-        view
-        override
-        returns (uint256 amountOut)
-    {
+    function quoteExactInputSingleV2(
+        QuoteExactInputSingleV2Params memory params
+    ) public view override returns (uint256 amountOut) {
         amountOut = getPairAmountOut(params.amountIn, params.tokenIn, params.tokenOut, params.stable);
     }
 
@@ -189,7 +155,10 @@ contract MixedRouteQuoterV1 is IMixedRouteQuoterV1, ICLSwapCallback, PeripheryIm
     /// @notice To encode a stable V2 pair within the path, use 0x200000 (hex value of 2097152) for the fee between the two token addresses
     /// @dev Get the quote for an exactIn swap between an array of V2 and/or V3 pools
     /// @dev If the pool does not exist, will quietly return 0 values
-    function quoteExactInput(bytes memory path, uint256 amountIn)
+    function quoteExactInput(
+        bytes memory path,
+        uint256 amountIn
+    )
         public
         override
         returns (
@@ -231,8 +200,7 @@ contract MixedRouteQuoterV1 is IMixedRouteQuoterV1, ICLSwapCallback, PeripheryIm
                     uint160 _sqrtPriceX96After,
                     uint32 _initializedTicksCrossed,
                     uint256 _gasEstimate
-                ) =
-                    quoteExactInputSingleV3(
+                ) = quoteExactInputSingleV3(
                         QuoteExactInputSingleV3Params({
                             tokenIn: tokenIn,
                             tokenOut: tokenOut,

@@ -13,13 +13,12 @@ contract LowFee1to1Price2e18MaxRangeLiquidityAllStakedTest is CLPoolSwapAllStake
         uint160 startingPrice = encodePriceSqrt(1, 1);
 
         string memory poolName = '.low_fee_1to1_price_2e18_max_range_liquidity';
-        address pool =
-            poolFactory.createPool({
-                tokenA: address(token0),
-                tokenB: address(token1),
-                tickSpacing: tickSpacing,
-                sqrtPriceX96: startingPrice
-            });
+        address pool = poolFactory.createPool({
+            tokenA: address(token0),
+            tokenB: address(token1),
+            tickSpacing: tickSpacing,
+            sqrtPriceX96: startingPrice
+        });
 
         uint128 liquidity = 2e18;
 
@@ -36,13 +35,12 @@ contract LowFee1to1Price2e18MaxRangeLiquidityAllStakedTest is CLPoolSwapAllStake
         customUnstakedFeeModule.setCustomFee(pool, 420);
 
         vm.startPrank(users.alice);
-        uint256 tokenId =
-            nftCallee.mintNewFullRangePositionForUserWithCustomTickSpacing(
-                liquidity,
-                liquidity,
-                tickSpacing,
-                users.alice
-            );
+        uint256 tokenId = nftCallee.mintNewFullRangePositionForUserWithCustomTickSpacing(
+            liquidity,
+            liquidity,
+            tickSpacing,
+            users.alice
+        );
         nft.approve(address(gauge), tokenId);
         gauge.deposit(tokenId);
 

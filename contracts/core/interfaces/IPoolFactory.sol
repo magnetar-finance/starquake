@@ -21,22 +21,14 @@ interface IPoolFactory {
     /// @param tokenA .
     /// @param tokenB .
     /// @param stable True if stable, false if volatile
-    function getPool(
-        address tokenA,
-        address tokenB,
-        bool stable
-    ) external view returns (address);
+    function getPool(address tokenA, address tokenB, bool stable) external view returns (address);
 
     /// @notice Support for v3-style pools which wraps around getPool(tokenA,tokenB,stable)
     /// @dev fee is converted to stable boolean.
     /// @param tokenA .
     /// @param tokenB .
     /// @param fee  1 if stable, 0 if volatile, else returns address(0)
-    function getPool(
-        address tokenA,
-        address tokenB,
-        uint24 fee
-    ) external view returns (address);
+    function getPool(address tokenA, address tokenB, uint24 fee) external view returns (address);
 
     /// @dev Only called once to set to Voter.sol - Voter does not have a function
     ///      to call this contract method, so once set it's immutable.
@@ -69,11 +61,7 @@ interface IPoolFactory {
     /// @param tokenA .
     /// @param tokenB .
     /// @param stable .
-    function createPool(
-        address tokenA,
-        address tokenB,
-        bool stable
-    ) external returns (address pool);
+    function createPool(address tokenA, address tokenB, bool stable) external returns (address pool);
 
     /// @notice Support for v3-style pools which wraps around createPool(tokena,tokenB,stable)
     /// @dev fee is converted to stable boolean
@@ -81,11 +69,7 @@ interface IPoolFactory {
     /// @param tokenA .
     /// @param tokenB .
     /// @param fee 1 if stable, 0 if volatile, else revert
-    function createPool(
-        address tokenA,
-        address tokenB,
-        uint24 fee
-    ) external returns (address pool);
+    function createPool(address tokenA, address tokenB, uint24 fee) external returns (address pool);
 
     function isPaused() external view returns (bool);
 

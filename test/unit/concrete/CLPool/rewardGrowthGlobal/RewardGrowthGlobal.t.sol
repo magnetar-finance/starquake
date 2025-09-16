@@ -51,11 +51,7 @@ contract RewardGrowthGlobalTest is CLPoolTest {
     }
 
     //@dev This function asserts the values of the Rewards to be Rolled Over
-    function assertRollover(
-        uint256 reward,
-        uint256 timeNoStakedLiq,
-        uint256 timeElapsed
-    ) internal {
+    function assertRollover(uint256 reward, uint256 timeNoStakedLiq, uint256 timeElapsed) internal {
         uint256 rewardRate = reward / WEEK;
         uint256 rollover = rewardRate * timeNoStakedLiq;
 
@@ -332,8 +328,11 @@ contract RewardGrowthGlobalTest is CLPoolTest {
         uint128 liquidity = 10e18;
         uint128 stakedLiquidity = 10e18;
 
-        uint256 tokenId =
-            nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(TOKEN_1 * 10, TOKEN_1 * 10, users.alice);
+        uint256 tokenId = nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(
+            TOKEN_1 * 10,
+            TOKEN_1 * 10,
+            users.alice
+        );
 
         // sanity checks
         assertEqUint(pool.liquidity(), liquidity);
@@ -372,8 +371,11 @@ contract RewardGrowthGlobalTest is CLPoolTest {
         skipToNextEpoch(0);
 
         // mint new position and stake it as well to trigger update
-        uint256 tokenId2 =
-            nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(TOKEN_1 * 10, TOKEN_1 * 10, users.alice);
+        uint256 tokenId2 = nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(
+            TOKEN_1 * 10,
+            TOKEN_1 * 10,
+            users.alice
+        );
         vm.startPrank(users.alice);
         nft.approve(address(gauge), tokenId2);
         gauge.deposit(tokenId2);
@@ -425,14 +427,13 @@ contract RewardGrowthGlobalTest is CLPoolTest {
 
     function test_RewardsRolledOverIfThereAreHolesInStakedLiquidityWithDepositAndWithdraw() public {
         // adding 29953549559107810 as amount0 and amount1 will be equal to ~10 liquidity
-        uint256 tokenId =
-            nftCallee.mintNewCustomRangePositionForUserWith60TickSpacing(
-                29953549559107810,
-                29953549559107810,
-                -tickSpacing,
-                tickSpacing,
-                users.alice
-            );
+        uint256 tokenId = nftCallee.mintNewCustomRangePositionForUserWith60TickSpacing(
+            29953549559107810,
+            29953549559107810,
+            -tickSpacing,
+            tickSpacing,
+            users.alice
+        );
 
         nft.approve(address(gauge), tokenId);
         gauge.deposit(tokenId);
@@ -478,14 +479,13 @@ contract RewardGrowthGlobalTest is CLPoolTest {
 
     function test_RewardsRolledOverIfThereAreMultipleHolesInStakedLiquidityWithDepositAndWithdraw() public {
         // adding 29953549559107810 as amount0 and amount1 will be equal to ~10 liquidity
-        uint256 tokenId =
-            nftCallee.mintNewCustomRangePositionForUserWith60TickSpacing(
-                29953549559107810,
-                29953549559107810,
-                -tickSpacing,
-                tickSpacing,
-                users.alice
-            );
+        uint256 tokenId = nftCallee.mintNewCustomRangePositionForUserWith60TickSpacing(
+            29953549559107810,
+            29953549559107810,
+            -tickSpacing,
+            tickSpacing,
+            users.alice
+        );
 
         nft.approve(address(gauge), tokenId);
         gauge.deposit(tokenId);
@@ -545,14 +545,13 @@ contract RewardGrowthGlobalTest is CLPoolTest {
         nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(TOKEN_1 * 10, TOKEN_1 * 10, users.alice);
 
         // adding 29953549559107810 as amount0 and amount1 will be equal to ~10 liquidity
-        uint256 tokenId =
-            nftCallee.mintNewCustomRangePositionForUserWith60TickSpacing(
-                29953549559107810,
-                29953549559107810,
-                -tickSpacing,
-                tickSpacing,
-                users.alice
-            );
+        uint256 tokenId = nftCallee.mintNewCustomRangePositionForUserWith60TickSpacing(
+            29953549559107810,
+            29953549559107810,
+            -tickSpacing,
+            tickSpacing,
+            users.alice
+        );
         nft.approve(address(gauge), tokenId);
         gauge.deposit(tokenId);
 
@@ -600,14 +599,13 @@ contract RewardGrowthGlobalTest is CLPoolTest {
         nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(TOKEN_1 * 10, TOKEN_1 * 10, users.alice);
 
         // adding 29953549559107810 as amount0 and amount1 will be equal to ~10 liquidity
-        uint256 tokenId =
-            nftCallee.mintNewCustomRangePositionForUserWith60TickSpacing(
-                29953549559107810,
-                29953549559107810,
-                -tickSpacing,
-                tickSpacing,
-                users.alice
-            );
+        uint256 tokenId = nftCallee.mintNewCustomRangePositionForUserWith60TickSpacing(
+            29953549559107810,
+            29953549559107810,
+            -tickSpacing,
+            tickSpacing,
+            users.alice
+        );
         nft.approve(address(gauge), tokenId);
         gauge.deposit(tokenId);
 
@@ -686,8 +684,11 @@ contract RewardGrowthGlobalTest is CLPoolTest {
     function test_RewardsRolledOverIfHolesAcrossAdjacentEpochs() public {
         uint256 reward = TOKEN_1;
 
-        uint256 tokenId =
-            nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(TOKEN_1 * 10, TOKEN_1 * 10, users.alice);
+        uint256 tokenId = nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(
+            TOKEN_1 * 10,
+            TOKEN_1 * 10,
+            users.alice
+        );
 
         addRewardToGauge(address(voter), address(gauge), reward);
 
@@ -713,8 +714,11 @@ contract RewardGrowthGlobalTest is CLPoolTest {
     function test_RewardsRolledOverIfHolesAcrossNonAdjacentEpochs() public {
         uint256 reward = TOKEN_1;
 
-        uint256 tokenId =
-            nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(TOKEN_1 * 10, TOKEN_1 * 10, users.alice);
+        uint256 tokenId = nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(
+            TOKEN_1 * 10,
+            TOKEN_1 * 10,
+            users.alice
+        );
 
         addRewardToGauge(address(voter), address(gauge), reward);
 
@@ -743,8 +747,11 @@ contract RewardGrowthGlobalTest is CLPoolTest {
     {
         uint128 stakedLiquidity = 10e18;
 
-        uint256 tokenId =
-            nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(TOKEN_1 * 10, TOKEN_1 * 10, users.alice);
+        uint256 tokenId = nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(
+            TOKEN_1 * 10,
+            TOKEN_1 * 10,
+            users.alice
+        );
         vm.startPrank(users.alice);
         nft.approve(address(gauge), tokenId);
         gauge.deposit(tokenId);
@@ -771,8 +778,11 @@ contract RewardGrowthGlobalTest is CLPoolTest {
     {
         uint128 stakedLiquidity = 10e18;
 
-        uint256 tokenId =
-            nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(TOKEN_1 * 10, TOKEN_1 * 10, users.alice);
+        uint256 tokenId = nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(
+            TOKEN_1 * 10,
+            TOKEN_1 * 10,
+            users.alice
+        );
         vm.startPrank(users.alice);
         nft.approve(address(gauge), tokenId);
         gauge.deposit(tokenId);
@@ -805,8 +815,11 @@ contract RewardGrowthGlobalTest is CLPoolTest {
     }
 
     function test_RewardGrowthGlobalUpdatesCorrectlyWhenNoStakeLiquidityPresentForMoreThanOneEpoch() public {
-        uint256 tokenId =
-            nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(TOKEN_1 * 10, TOKEN_1 * 10, users.alice);
+        uint256 tokenId = nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(
+            TOKEN_1 * 10,
+            TOKEN_1 * 10,
+            users.alice
+        );
 
         uint256 reward = TOKEN_1;
         addRewardToGauge(address(voter), address(gauge), reward);
@@ -842,8 +855,11 @@ contract RewardGrowthGlobalTest is CLPoolTest {
     }
 
     function test_RewardGrowthNoRollover() public {
-        uint256 tokenId =
-            nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(TOKEN_1 * 10, TOKEN_1 * 10, users.alice);
+        uint256 tokenId = nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(
+            TOKEN_1 * 10,
+            TOKEN_1 * 10,
+            users.alice
+        );
 
         uint256 reward = TOKEN_1;
         addRewardToGauge(address(voter), address(gauge), reward);
@@ -878,8 +894,11 @@ contract RewardGrowthGlobalTest is CLPoolTest {
     }
 
     function test_RewardGrowthDelayedRollover() public {
-        uint256 tokenId =
-            nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(TOKEN_1 * 10, TOKEN_1 * 10, users.alice);
+        uint256 tokenId = nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(
+            TOKEN_1 * 10,
+            TOKEN_1 * 10,
+            users.alice
+        );
 
         uint256 reward = TOKEN_1;
         addRewardToGauge(address(voter), address(gauge), reward);
@@ -914,8 +933,11 @@ contract RewardGrowthGlobalTest is CLPoolTest {
     }
 
     function test_RewardGrowthEpochSkipped() public {
-        uint256 tokenId =
-            nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(TOKEN_1 * 10, TOKEN_1 * 10, users.alice);
+        uint256 tokenId = nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(
+            TOKEN_1 * 10,
+            TOKEN_1 * 10,
+            users.alice
+        );
 
         uint256 reward = TOKEN_1;
         addRewardToGauge(address(voter), address(gauge), reward);
@@ -952,8 +974,11 @@ contract RewardGrowthGlobalTest is CLPoolTest {
     }
 
     function test_RewardGrowthEpochSkippedNoDelay() public {
-        uint256 tokenId =
-            nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(TOKEN_1 * 10, TOKEN_1 * 10, users.alice);
+        uint256 tokenId = nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(
+            TOKEN_1 * 10,
+            TOKEN_1 * 10,
+            users.alice
+        );
 
         uint256 reward = TOKEN_1;
         addRewardToGauge(address(voter), address(gauge), reward);
@@ -990,8 +1015,11 @@ contract RewardGrowthGlobalTest is CLPoolTest {
     }
 
     function test_RewardGrowthMultipleEpochSkippedDelayed() public {
-        uint256 tokenId =
-            nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(TOKEN_1 * 10, TOKEN_1 * 10, users.alice);
+        uint256 tokenId = nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(
+            TOKEN_1 * 10,
+            TOKEN_1 * 10,
+            users.alice
+        );
 
         uint256 reward = TOKEN_1;
         addRewardToGauge(address(voter), address(gauge), reward);
@@ -1030,8 +1058,11 @@ contract RewardGrowthGlobalTest is CLPoolTest {
     }
 
     function test_RewardGrowthMultipleEpochSkippedNoDelay() public {
-        uint256 tokenId =
-            nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(TOKEN_1 * 10, TOKEN_1 * 10, users.alice);
+        uint256 tokenId = nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(
+            TOKEN_1 * 10,
+            TOKEN_1 * 10,
+            users.alice
+        );
 
         uint256 reward = TOKEN_1;
         addRewardToGauge(address(voter), address(gauge), reward);
@@ -1069,8 +1100,11 @@ contract RewardGrowthGlobalTest is CLPoolTest {
     }
 
     function test_RewardGrowthGlobalUpdatesCorrectlyWithUnstakedLiquidityBothAtTheStartAndEndOfTheEpoch() public {
-        uint256 tokenId =
-            nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(TOKEN_1 * 10, TOKEN_1 * 10, users.alice);
+        uint256 tokenId = nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(
+            TOKEN_1 * 10,
+            TOKEN_1 * 10,
+            users.alice
+        );
 
         uint256 reward = TOKEN_1;
         addRewardToGauge(address(voter), address(gauge), reward);
@@ -1100,8 +1134,11 @@ contract RewardGrowthGlobalTest is CLPoolTest {
     }
 
     function test_RewardGrowthOnlyAccountRewardsTillTheEndOfTheEpochInCaseOfLateNotify() public {
-        uint256 tokenId =
-            nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(TOKEN_1 * 10, TOKEN_1 * 10, users.alice);
+        uint256 tokenId = nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(
+            TOKEN_1 * 10,
+            TOKEN_1 * 10,
+            users.alice
+        );
 
         uint256 reward = TOKEN_1;
         addRewardToGauge(address(voter), address(gauge), reward);
@@ -1128,8 +1165,11 @@ contract RewardGrowthGlobalTest is CLPoolTest {
     function test_RewardGrowthGlobalUpdatesCorrectlyWithMultipleCallsToUpdateRewardsGrowthGlobalAfterEpochFlip()
         public
     {
-        uint256 tokenId =
-            nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(TOKEN_1 * 10, TOKEN_1 * 10, users.alice);
+        uint256 tokenId = nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(
+            TOKEN_1 * 10,
+            TOKEN_1 * 10,
+            users.alice
+        );
 
         uint256 reward = TOKEN_1;
         addRewardToGauge(address(voter), address(gauge), reward);

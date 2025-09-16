@@ -47,11 +47,7 @@ contract GaugeFlowTest is BaseForkFixture {
     }
 
     //swaps a certain amount of token0 for token1 - only intended for testing purposes
-    function doSwap(
-        uint256 _amount,
-        address user,
-        bool token0In
-    ) internal returns (uint256 amountOut) {
+    function doSwap(uint256 _amount, address user, bool token0In) internal returns (uint256 amountOut) {
         TransferHelper.safeApprove(token0In ? pool.token0() : pool.token1(), address(swapRouter), _amount);
         amountOut = swapRouter.exactInputSingle(
             ISwapRouter.ExactInputSingleParams({
@@ -81,23 +77,14 @@ contract GaugeFlowTest is BaseForkFixture {
         skip(1 hours);
     }
 
-    function checkEmissions(
-        address user,
-        uint256 tokenId,
-        uint256 expectedBalance
-    ) internal {
+    function checkEmissions(address user, uint256 tokenId, uint256 expectedBalance) internal {
         vm.startPrank(user);
         gauge.getReward(tokenId);
         assertEq(rewardToken.balanceOf(user), expectedBalance);
         vm.stopPrank();
     }
 
-    function checkFees(
-        address user,
-        uint256 tokenId,
-        uint256 expectedBalanceWETH,
-        uint256 expectedBalanceOP
-    ) internal {
+    function checkFees(address user, uint256 tokenId, uint256 expectedBalanceWETH, uint256 expectedBalanceOP) internal {
         vm.startPrank(user);
         //claim fees rewards
         address[] memory feesVotingRewards = new address[](1);
@@ -120,12 +107,11 @@ contract GaugeFlowTest is BaseForkFixture {
         weth.approve(address(nftCallee), TOKEN_1 * 1_000);
         deal(address(op), users.alice, TOKEN_1 * 1_000_000);
         op.approve(address(nftCallee), TOKEN_1 * 1_000_000);
-        uint256 tokenIdAlice =
-            nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(
-                TOKEN_1 * 1_000,
-                TOKEN_1 * 1_000_000,
-                users.alice
-            );
+        uint256 tokenIdAlice = nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(
+            TOKEN_1 * 1_000,
+            TOKEN_1 * 1_000_000,
+            users.alice
+        );
         nft.approve(address(gauge), tokenIdAlice);
         gauge.deposit(tokenIdAlice);
         vm.stopPrank();
@@ -149,8 +135,11 @@ contract GaugeFlowTest is BaseForkFixture {
         weth.approve(address(nftCallee), TOKEN_1 * 1_000);
         deal(address(op), users.bob, TOKEN_1 * 1_000_000);
         op.approve(address(nftCallee), TOKEN_1 * 1_000_000);
-        uint256 tokenIdBob =
-            nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(TOKEN_1 * 1_000, TOKEN_1 * 1_000_000, users.bob);
+        uint256 tokenIdBob = nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(
+            TOKEN_1 * 1_000,
+            TOKEN_1 * 1_000_000,
+            users.bob
+        );
         vm.stopPrank();
 
         //check balances went to unstaked position
@@ -284,12 +273,11 @@ contract GaugeFlowTest is BaseForkFixture {
         weth.approve(address(nftCallee), TOKEN_1 * 10_000);
         deal(address(op), largeTokenHolder, TOKEN_1 * 100_000_000);
         op.approve(address(nftCallee), TOKEN_1 * 100_000_000);
-        uint256 tokenIdLarge =
-            nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(
-                TOKEN_1 * 10_000,
-                TOKEN_1 * 100_000_000,
-                largeTokenHolder
-            );
+        uint256 tokenIdLarge = nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(
+            TOKEN_1 * 10_000,
+            TOKEN_1 * 100_000_000,
+            largeTokenHolder
+        );
         nft.approve(address(gauge), tokenIdLarge);
         gauge.deposit(tokenIdLarge);
         vm.stopPrank();

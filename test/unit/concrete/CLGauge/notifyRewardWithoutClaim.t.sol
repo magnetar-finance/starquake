@@ -61,8 +61,11 @@ contract NotifyRewardWithoutClaimTest is CLGaugeTest {
 
         // generate gauge fees
         vm.startPrank(users.alice);
-        uint256 tokenId =
-            nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(TOKEN_1 * 2, TOKEN_1 * 2, users.alice);
+        uint256 tokenId = nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(
+            TOKEN_1 * 2,
+            TOKEN_1 * 2,
+            users.alice
+        );
         nft.approve(address(gauge), tokenId);
         gauge.deposit(tokenId);
         clCallee.swapExact0For1(address(pool), TOKEN_1, users.alice, MIN_SQRT_RATIO + 1);
@@ -120,8 +123,11 @@ contract NotifyRewardWithoutClaimTest is CLGaugeTest {
 
         // generate gauge fees
         vm.startPrank(users.alice);
-        uint256 tokenId =
-            nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(TOKEN_1 * 2, TOKEN_1 * 2, users.alice);
+        uint256 tokenId = nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(
+            TOKEN_1 * 2,
+            TOKEN_1 * 2,
+            users.alice
+        );
         nft.approve(address(gauge), tokenId);
         gauge.deposit(tokenId);
         clCallee.swapExact0For1(address(pool), TOKEN_1, users.alice, MIN_SQRT_RATIO + 1);
@@ -157,8 +163,11 @@ contract NotifyRewardWithoutClaimTest is CLGaugeTest {
     function test_NotifyRewardWithoutClaimAfterNotifyRewardAmountWithRewardRollover() public {
         uint256 reward = TOKEN_1;
         uint256 reward2 = TOKEN_1 * 2;
-        uint256 tokenId =
-            nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(TOKEN_1 * 10, TOKEN_1 * 10, users.alice);
+        uint256 tokenId = nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(
+            TOKEN_1 * 10,
+            TOKEN_1 * 10,
+            users.alice
+        );
 
         // add initial rewards
         addRewardToGauge(address(voter), address(gauge), reward);
@@ -201,8 +210,11 @@ contract NotifyRewardWithoutClaimTest is CLGaugeTest {
     function test_NotifyRewardWithoutClaimBeforeNotifyRewardAmountWithRewardRollover() public {
         uint256 reward = TOKEN_1;
         uint256 reward2 = TOKEN_1 * 2;
-        uint256 tokenId =
-            nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(TOKEN_1 * 10, TOKEN_1 * 10, users.alice);
+        uint256 tokenId = nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(
+            TOKEN_1 * 10,
+            TOKEN_1 * 10,
+            users.alice
+        );
 
         // add initial rewards
         vm.startPrank(users.owner);

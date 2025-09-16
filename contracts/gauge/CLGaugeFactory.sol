@@ -29,14 +29,14 @@ contract CLGaugeFactory is ICLGaugeFactory, Ownable {
     }
 
     /// @inheritdoc ICLGaugeFactory
-    function setNotifyAdmin(address _admin) external override onlyNotifyAdmin() {
+    function setNotifyAdmin(address _admin) external override onlyNotifyAdmin {
         require(_admin != address(0), 'ZA');
         notifyAdmin = _admin;
         emit SetNotifyAdmin(_admin);
     }
 
     /// @inheritdoc ICLGaugeFactory
-    function setNonfungiblePositionManager(address _nft) external override onlyOwner() {
+    function setNonfungiblePositionManager(address _nft) external override onlyOwner {
         require(nft == address(0), 'AI');
         require(_nft != address(0), 'ZA');
         nft = _nft;
@@ -45,7 +45,7 @@ contract CLGaugeFactory is ICLGaugeFactory, Ownable {
 
     /// @inheritdoc ICLGaugeFactory
     function createGauge(
-        address, /* _forwarder */
+        address /* _forwarder */,
         address _pool,
         address _feesVotingReward,
         address _rewardToken,

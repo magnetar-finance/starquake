@@ -9,12 +9,10 @@ import '../interfaces/ITickLens.sol';
 /// @title Tick Lens contract
 contract TickLens is ITickLens {
     /// @inheritdoc ITickLens
-    function getPopulatedTicksInWord(address pool, int16 tickBitmapIndex)
-        public
-        view
-        override
-        returns (PopulatedTick[] memory populatedTicks)
-    {
+    function getPopulatedTicksInWord(
+        address pool,
+        int16 tickBitmapIndex
+    ) public view override returns (PopulatedTick[] memory populatedTicks) {
         // fetch bitmap
         uint256 bitmap = ICLPool(pool).tickBitmap(tickBitmapIndex);
 

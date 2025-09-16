@@ -74,11 +74,9 @@ contract E2E_mint_burn {
         require(burnAmount > 0);
     }
 
-    function _getRandomPositionIdxAndBurnAmount(uint128 _seed)
-        internal
-        view
-        returns (uint128 positionIdx, uint128 burnAmount)
-    {
+    function _getRandomPositionIdxAndBurnAmount(
+        uint128 _seed
+    ) internal view returns (uint128 positionIdx, uint128 burnAmount) {
         positionIdx = _getRandomPositionIdx(_seed, positions.length);
         burnAmount = _getRandomBurnAmount(_seed, positions[positionIdx].amount);
     }
@@ -280,32 +278,22 @@ contract E2E_mint_burn {
         int24 _poolTickSpacing,
         uint24 _poolTickCount,
         int24 _poolMaxTick
-    )
-        public
-        pure
-        returns (
-            int24 tickLower,
-            int24 tickUpper,
-            uint128 amount
-        )
-    {
+    ) public pure returns (int24 tickLower, int24 tickUpper, uint128 amount) {
         (tickLower, tickUpper) = forgePosition(_seed, _poolTickSpacing, _poolTickCount, _poolMaxTick);
         amount = _seed;
     }
 
-    function viewBurnRandomPositionIdx(uint128 _seed, uint128 _positionsCount)
-        public
-        pure
-        returns (uint128 positionIdx)
-    {
+    function viewBurnRandomPositionIdx(
+        uint128 _seed,
+        uint128 _positionsCount
+    ) public pure returns (uint128 positionIdx) {
         positionIdx = _getRandomPositionIdx(_seed, _positionsCount);
     }
 
-    function viewBurnRandomPositionBurnAmount(uint128 _seed, uint128 _positionAmount)
-        public
-        pure
-        returns (uint128 burnAmount)
-    {
+    function viewBurnRandomPositionBurnAmount(
+        uint128 _seed,
+        uint128 _positionAmount
+    ) public pure returns (uint128 burnAmount) {
         burnAmount = _getRandomBurnAmount(_seed, _positionAmount);
     }
 
@@ -377,8 +365,12 @@ contract E2E_mint_burn {
     //
     function testEchidna_mint(uint128 _amount) public {
         if (!inited) _init(_amount);
-        (int24 _tL, int24 _tU) =
-            forgePosition(_amount, poolParams.tickSpacing, poolParams.tickCount, poolParams.maxTick);
+        (int24 _tL, int24 _tU) = forgePosition(
+            _amount,
+            poolParams.tickSpacing,
+            poolParams.tickCount,
+            poolParams.maxTick
+        );
 
         (CLMinter.MinterStats memory bfre, CLMinter.MinterStats memory aftr) = minter.doMint(_tL, _tU, _amount);
         storeUsedTicks(_tL, _tU);

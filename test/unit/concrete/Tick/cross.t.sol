@@ -10,19 +10,18 @@ contract CrossTest is TickTestBase {
     }
 
     function test_FlipGrowthVariable() public {
-        Tick.Info memory tickInfo =
-            Tick.Info({
-                feeGrowthOutside0X128: 1,
-                feeGrowthOutside1X128: 2,
-                rewardGrowthOutsideX128: 10,
-                liquidityGross: 3,
-                liquidityNet: 4,
-                stakedLiquidityNet: 0,
-                secondsPerLiquidityOutsideX128: 5,
-                tickCumulativeOutside: 6,
-                secondsOutside: 7,
-                initialized: true
-            });
+        Tick.Info memory tickInfo = Tick.Info({
+            feeGrowthOutside0X128: 1,
+            feeGrowthOutside1X128: 2,
+            rewardGrowthOutsideX128: 10,
+            liquidityGross: 3,
+            liquidityNet: 4,
+            stakedLiquidityNet: 0,
+            secondsPerLiquidityOutsideX128: 5,
+            tickCumulativeOutside: 6,
+            secondsOutside: 7,
+            initialized: true
+        });
 
         tickTest.setTick(2, tickInfo);
 
@@ -50,19 +49,18 @@ contract CrossTest is TickTestBase {
     }
 
     function test_TwoFlipsAreNoOp() public {
-        Tick.Info memory tickInfo =
-            Tick.Info({
-                feeGrowthOutside0X128: 1,
-                feeGrowthOutside1X128: 2,
-                rewardGrowthOutsideX128: 20,
-                liquidityGross: 3,
-                liquidityNet: 4,
-                stakedLiquidityNet: 0,
-                secondsPerLiquidityOutsideX128: 5,
-                tickCumulativeOutside: 6,
-                secondsOutside: 7,
-                initialized: true
-            });
+        Tick.Info memory tickInfo = Tick.Info({
+            feeGrowthOutside0X128: 1,
+            feeGrowthOutside1X128: 2,
+            rewardGrowthOutsideX128: 20,
+            liquidityGross: 3,
+            liquidityNet: 4,
+            stakedLiquidityNet: 0,
+            secondsPerLiquidityOutsideX128: 5,
+            tickCumulativeOutside: 6,
+            secondsOutside: 7,
+            initialized: true
+        });
 
         tickTest.setTick(2, tickInfo);
 

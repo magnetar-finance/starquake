@@ -43,7 +43,7 @@ async function main() {
   // Network ID
   const networkId = network.config.chainId as number;
   // Constants
-  const CONSTANTS = Values[(networkId as unknown) as keyof typeof Values];
+  const CONSTANTS = Values[networkId as unknown as keyof typeof Values];
   // Deployments
   const deploymentDirectory = 'script/constants/output';
   const deploymentFile = join(process.cwd(), deploymentDirectory, `CoreOutput-${String(networkId)}.json`);
@@ -52,7 +52,7 @@ async function main() {
 
   // Factory
   const clFactory = await getContractAtAddress<CLFactory>('CLFactory', json.poolFactory);
-  const values = Values[(networkId as unknown) as keyof typeof Values];
+  const values = Values[networkId as unknown as keyof typeof Values];
 
   const promises: Promise<ContractTransaction>[] = [];
   const signers = await ethers.getSigners();

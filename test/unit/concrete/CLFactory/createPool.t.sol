@@ -61,38 +61,35 @@ contract CreatePoolTest is CLFactoryTest {
     }
 
     function test_CreatePoolWithTickSpacingStable() public {
-        address pool =
-            createAndCheckPool({
-                factory: poolFactory,
-                token0: TEST_TOKEN_0,
-                token1: TEST_TOKEN_1,
-                tickSpacing: TICK_SPACING_STABLE,
-                sqrtPriceX96: encodePriceSqrt(1, 1)
-            });
+        address pool = createAndCheckPool({
+            factory: poolFactory,
+            token0: TEST_TOKEN_0,
+            token1: TEST_TOKEN_1,
+            tickSpacing: TICK_SPACING_STABLE,
+            sqrtPriceX96: encodePriceSqrt(1, 1)
+        });
         assertEqUint(poolFactory.getSwapFee(pool), 100);
     }
 
     function test_CreatePoolWithTickSpacingLow() public {
-        address pool =
-            createAndCheckPool({
-                factory: poolFactory,
-                token0: TEST_TOKEN_0,
-                token1: TEST_TOKEN_1,
-                tickSpacing: TICK_SPACING_LOW,
-                sqrtPriceX96: encodePriceSqrt(1, 1)
-            });
+        address pool = createAndCheckPool({
+            factory: poolFactory,
+            token0: TEST_TOKEN_0,
+            token1: TEST_TOKEN_1,
+            tickSpacing: TICK_SPACING_LOW,
+            sqrtPriceX96: encodePriceSqrt(1, 1)
+        });
         assertEqUint(poolFactory.getSwapFee(pool), 500);
     }
 
     function test_CreatePoolWithTickSpacingMedium() public {
-        address pool =
-            createAndCheckPool({
-                factory: poolFactory,
-                token0: TEST_TOKEN_0,
-                token1: TEST_TOKEN_1,
-                tickSpacing: TICK_SPACING_MEDIUM,
-                sqrtPriceX96: encodePriceSqrt(1, 1)
-            });
+        address pool = createAndCheckPool({
+            factory: poolFactory,
+            token0: TEST_TOKEN_0,
+            token1: TEST_TOKEN_1,
+            tickSpacing: TICK_SPACING_MEDIUM,
+            sqrtPriceX96: encodePriceSqrt(1, 1)
+        });
         assertEqUint(poolFactory.getSwapFee(pool), 500);
 
         CLGauge gauge = CLGauge(voter.createGauge({_poolFactory: address(poolFactory), _pool: address(pool)}));
@@ -104,14 +101,13 @@ contract CreatePoolTest is CLFactoryTest {
     }
 
     function test_CreatePoolWithTickSpacingHigh() public {
-        address pool =
-            createAndCheckPool({
-                factory: poolFactory,
-                token0: TEST_TOKEN_0,
-                token1: TEST_TOKEN_1,
-                tickSpacing: TICK_SPACING_HIGH,
-                sqrtPriceX96: encodePriceSqrt(1, 1)
-            });
+        address pool = createAndCheckPool({
+            factory: poolFactory,
+            token0: TEST_TOKEN_0,
+            token1: TEST_TOKEN_1,
+            tickSpacing: TICK_SPACING_HIGH,
+            sqrtPriceX96: encodePriceSqrt(1, 1)
+        });
         assertEqUint(poolFactory.getSwapFee(pool), 3_000);
 
         CLGauge gauge = CLGauge(voter.createGauge({_poolFactory: address(poolFactory), _pool: address(pool)}));
@@ -123,14 +119,13 @@ contract CreatePoolTest is CLFactoryTest {
     }
 
     function test_CreatePoolWithTickSpacingVolatile() public {
-        address pool =
-            createAndCheckPool({
-                factory: poolFactory,
-                token0: TEST_TOKEN_0,
-                token1: TEST_TOKEN_1,
-                tickSpacing: TICK_SPACING_VOLATILE,
-                sqrtPriceX96: encodePriceSqrt(1, 1)
-            });
+        address pool = createAndCheckPool({
+            factory: poolFactory,
+            token0: TEST_TOKEN_0,
+            token1: TEST_TOKEN_1,
+            tickSpacing: TICK_SPACING_VOLATILE,
+            sqrtPriceX96: encodePriceSqrt(1, 1)
+        });
         assertEqUint(poolFactory.getSwapFee(pool), 10_000);
 
         CLGauge gauge = CLGauge(voter.createGauge({_poolFactory: address(poolFactory), _pool: address(pool)}));

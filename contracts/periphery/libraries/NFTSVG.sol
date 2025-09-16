@@ -65,8 +65,9 @@ library NFTSVG {
         uint256 tokenId,
         int24 tickSpacing
     ) private pure returns (string memory svg) {
-        string memory poolId =
-            string(abi.encodePacked('CL', tickToString(tickSpacing), '-', quoteTokenSymbol, '/', baseTokenSymbol));
+        string memory poolId = string(
+            abi.encodePacked('CL', tickToString(tickSpacing), '-', quoteTokenSymbol, '/', baseTokenSymbol)
+        );
         string memory tokenIdStr = string(abi.encodePacked('ID #', tokenId.toString()));
         string memory id = string(abi.encodePacked(poolId, tokenIdStr));
         svg = string(
@@ -135,8 +136,9 @@ library NFTSVG {
     ) internal pure returns (string memory svg) {
         string memory balance0 = balanceToDecimals(quoteTokensOwed, quoteTokenDecimals);
         string memory balance1 = balanceToDecimals(baseTokensOwed, baseTokenDecimals);
-        string memory balances =
-            string(abi.encodePacked(balance0, ' ', quoteTokenSymbol, ' ~ ', balance1, ' ', baseTokenSymbol));
+        string memory balances = string(
+            abi.encodePacked(balance0, ' ', quoteTokenSymbol, ' ~ ', balance1, ' ', baseTokenSymbol)
+        );
         string memory tickLow = string(abi.encodePacked(tickToString(tickLower), ' Low '));
         string memory tickHigh = string(abi.encodePacked(tickToString(tickUpper), ' High '));
         svg = string(
@@ -162,13 +164,13 @@ library NFTSVG {
     }
 
     function balanceToDecimals(uint256 balance, uint8 decimals) private pure returns (string memory) {
-        uint256 divisor = 10**decimals;
+        uint256 divisor = 10 ** decimals;
         uint256 integerPart = balance / divisor;
         uint256 fractionalPart = balance % divisor;
 
         // trim to 5 dp
         if (decimals > 5) {
-            uint256 adjustedDivisor = 10**(decimals - 5);
+            uint256 adjustedDivisor = 10 ** (decimals - 5);
             fractionalPart = adjustedDivisor > 0 ? fractionalPart / adjustedDivisor : fractionalPart;
         }
 

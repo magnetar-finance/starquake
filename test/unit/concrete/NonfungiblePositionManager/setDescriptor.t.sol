@@ -11,13 +11,12 @@ contract SetDescriptorTest is NonfungiblePositionManagerTest {
 
     function test_SetTokenDescriptor() public {
         address tokenDescriptor = nft.tokenDescriptor();
-        address newTokenDescriptor =
-            address(
-                new NonfungibleTokenPositionDescriptor({
-                    _WETH9: address(weth),
-                    _nativeCurrencyLabelBytes: 0x4554480000000000000000000000000000000000000000000000000000000000
-                })
-            ); // 'ETH' as bytes32 string
+        address newTokenDescriptor = address(
+            new NonfungibleTokenPositionDescriptor({
+                _WETH9: address(weth),
+                _nativeCurrencyLabelBytes: 0x4554480000000000000000000000000000000000000000000000000000000000
+            })
+        ); // 'ETH' as bytes32 string
         assertNotEq(tokenDescriptor, newTokenDescriptor);
 
         vm.expectEmit(false, false, false, true, address(nft));

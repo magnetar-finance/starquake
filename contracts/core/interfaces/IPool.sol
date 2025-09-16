@@ -28,15 +28,7 @@ interface IPool {
     function metadata()
         external
         view
-        returns (
-            uint256 dec0,
-            uint256 dec1,
-            uint256 r0,
-            uint256 r1,
-            bool st,
-            address t0,
-            address t1
-        );
+        returns (uint256 dec0, uint256 dec1, uint256 r0, uint256 r1, bool st, address t0, address t1);
 
     /// @notice Claim accumulated but unclaimed fees (claimable0 and claimable1)
     function claimFees() external returns (uint256, uint256);
@@ -115,22 +107,14 @@ interface IPool {
     function currentCumulativePrices()
         external
         view
-        returns (
-            uint256 reserve0Cumulative,
-            uint256 reserve1Cumulative,
-            uint256 blockTimestamp
-        );
+        returns (uint256 reserve0Cumulative, uint256 reserve1Cumulative, uint256 blockTimestamp);
 
     /// @notice Provides twap price with user configured granularity, up to the full window size
     /// @param tokenIn .
     /// @param amountIn .
     /// @param granularity .
     /// @return amountOut .
-    function quote(
-        address tokenIn,
-        uint256 amountIn,
-        uint256 granularity
-    ) external view returns (uint256 amountOut);
+    function quote(address tokenIn, uint256 amountIn, uint256 granularity) external view returns (uint256 amountOut);
 
     /// @notice Returns a memory set of TWAP prices
     ///         Same as calling sample(tokenIn, amountIn, points, 1)
@@ -138,11 +122,7 @@ interface IPool {
     /// @param amountIn .
     /// @param points Number of points to return
     /// @return Array of TWAP prices
-    function prices(
-        address tokenIn,
-        uint256 amountIn,
-        uint256 points
-    ) external view returns (uint256[] memory);
+    function prices(address tokenIn, uint256 amountIn, uint256 points) external view returns (uint256[] memory);
 
     /// @notice Same as prices with with an additional window argument.
     ///         Window = 2 means 2 * 30min (or 1 hr) between observations
@@ -163,12 +143,7 @@ interface IPool {
     /// @param amount1Out   Amount of token1 to send to `to`
     /// @param to           Address to recieve the swapped output
     /// @param data         Additional calldata for flashloans
-    function swap(
-        uint256 amount0Out,
-        uint256 amount1Out,
-        address to,
-        bytes calldata data
-    ) external;
+    function swap(uint256 amount0Out, uint256 amount1Out, address to, bytes calldata data) external;
 
     /// @notice This low-level function should be called from a contract which performs important safety checks
     ///         standard uniswap v2 implementation
@@ -187,14 +162,7 @@ interface IPool {
     /// @return _reserve0 .
     /// @return _reserve1 .
     /// @return _blockTimestampLast .
-    function getReserves()
-        external
-        view
-        returns (
-            uint256 _reserve0,
-            uint256 _reserve1,
-            uint256 _blockTimestampLast
-        );
+    function getReserves() external view returns (uint256 _reserve0, uint256 _reserve1, uint256 _blockTimestampLast);
 
     /// @notice Get the amount of tokenOut given the amount of tokenIn
     /// @param amountIn Amount of token in
@@ -213,9 +181,5 @@ interface IPool {
     /// @param _token0 Address of token0
     /// @param _token1 Address of token1
     /// @param _stable True if stable, false if volatile
-    function initialize(
-        address _token0,
-        address _token1,
-        bool _stable
-    ) external;
+    function initialize(address _token0, address _token1, bool _stable) external;
 }

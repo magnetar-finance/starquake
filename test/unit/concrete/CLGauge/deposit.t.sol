@@ -29,21 +29,20 @@ contract DepositTest is CLGaugeTest {
     }
 
     function test_RevertIf_CallerIsNotOwner() public {
-        INonfungiblePositionManager.MintParams memory params =
-            INonfungiblePositionManager.MintParams({
-                token0: address(token0),
-                token1: address(token1),
-                tickSpacing: TICK_SPACING_60,
-                tickLower: getMinTick(TICK_SPACING_60),
-                tickUpper: getMaxTick(TICK_SPACING_60),
-                recipient: users.alice,
-                amount0Desired: TOKEN_1,
-                amount1Desired: TOKEN_1,
-                amount0Min: 0,
-                amount1Min: 0,
-                deadline: 10,
-                sqrtPriceX96: 0
-            });
+        INonfungiblePositionManager.MintParams memory params = INonfungiblePositionManager.MintParams({
+            token0: address(token0),
+            token1: address(token1),
+            tickSpacing: TICK_SPACING_60,
+            tickLower: getMinTick(TICK_SPACING_60),
+            tickUpper: getMaxTick(TICK_SPACING_60),
+            recipient: users.alice,
+            amount0Desired: TOKEN_1,
+            amount1Desired: TOKEN_1,
+            amount0Min: 0,
+            amount1Min: 0,
+            deadline: 10,
+            sqrtPriceX96: 0
+        });
         (uint256 tokenId, , , ) = nft.mint(params);
 
         vm.startPrank(users.charlie);
@@ -52,21 +51,20 @@ contract DepositTest is CLGaugeTest {
     }
 
     function test_RevertIf_GaugeNotAlive() public {
-        INonfungiblePositionManager.MintParams memory params =
-            INonfungiblePositionManager.MintParams({
-                token0: address(token0),
-                token1: address(token1),
-                tickSpacing: TICK_SPACING_60,
-                tickLower: getMinTick(TICK_SPACING_60),
-                tickUpper: getMaxTick(TICK_SPACING_60),
-                recipient: users.alice,
-                amount0Desired: TOKEN_1,
-                amount1Desired: TOKEN_1,
-                amount0Min: 0,
-                amount1Min: 0,
-                deadline: 10,
-                sqrtPriceX96: 0
-            });
+        INonfungiblePositionManager.MintParams memory params = INonfungiblePositionManager.MintParams({
+            token0: address(token0),
+            token1: address(token1),
+            tickSpacing: TICK_SPACING_60,
+            tickLower: getMinTick(TICK_SPACING_60),
+            tickUpper: getMaxTick(TICK_SPACING_60),
+            recipient: users.alice,
+            amount0Desired: TOKEN_1,
+            amount1Desired: TOKEN_1,
+            amount0Min: 0,
+            amount1Min: 0,
+            deadline: 10,
+            sqrtPriceX96: 0
+        });
         (uint256 tokenId, , , ) = nft.mint(params);
 
         // write directly to storage to kill gauge in the mock contract
@@ -87,34 +85,32 @@ contract DepositTest is CLGaugeTest {
         deal({token: address(testToken0), to: users.charlie, give: TOKEN_1});
         deal({token: address(testToken1), to: users.charlie, give: TOKEN_1});
 
-        address pool2 =
-            poolFactory.createPool({
-                tokenA: address(testToken0),
-                tokenB: address(testToken1),
-                tickSpacing: TICK_SPACING_60,
-                sqrtPriceX96: encodePriceSqrt(1, 1)
-            });
+        address pool2 = poolFactory.createPool({
+            tokenA: address(testToken0),
+            tokenB: address(testToken1),
+            tickSpacing: TICK_SPACING_60,
+            sqrtPriceX96: encodePriceSqrt(1, 1)
+        });
         voter.createGauge({_poolFactory: address(poolFactory), _pool: address(pool2)});
 
         vm.startPrank(users.charlie);
         testToken0.approve(address(nft), type(uint256).max);
         testToken1.approve(address(nft), type(uint256).max);
 
-        INonfungiblePositionManager.MintParams memory params =
-            INonfungiblePositionManager.MintParams({
-                token0: address(testToken0),
-                token1: address(testToken1),
-                tickSpacing: TICK_SPACING_60,
-                tickLower: getMinTick(TICK_SPACING_60),
-                tickUpper: getMaxTick(TICK_SPACING_60),
-                recipient: users.charlie,
-                amount0Desired: TOKEN_1,
-                amount1Desired: TOKEN_1,
-                amount0Min: 0,
-                amount1Min: 0,
-                deadline: 10,
-                sqrtPriceX96: 0
-            });
+        INonfungiblePositionManager.MintParams memory params = INonfungiblePositionManager.MintParams({
+            token0: address(testToken0),
+            token1: address(testToken1),
+            tickSpacing: TICK_SPACING_60,
+            tickLower: getMinTick(TICK_SPACING_60),
+            tickUpper: getMaxTick(TICK_SPACING_60),
+            recipient: users.charlie,
+            amount0Desired: TOKEN_1,
+            amount1Desired: TOKEN_1,
+            amount0Min: 0,
+            amount1Min: 0,
+            deadline: 10,
+            sqrtPriceX96: 0
+        });
         (uint256 tokenId, , , ) = nft.mint(params);
 
         nft.approve(address(gauge), tokenId);
@@ -123,31 +119,29 @@ contract DepositTest is CLGaugeTest {
     }
 
     function test_RevertIf_DepositIsNotFromCorrespondingPoolWithSameTokensDifferentTickSize() public {
-        address pool2 =
-            poolFactory.createPool({
-                tokenA: address(token0),
-                tokenB: address(token1),
-                tickSpacing: TICK_SPACING_10,
-                sqrtPriceX96: encodePriceSqrt(1, 1)
-            });
+        address pool2 = poolFactory.createPool({
+            tokenA: address(token0),
+            tokenB: address(token1),
+            tickSpacing: TICK_SPACING_10,
+            sqrtPriceX96: encodePriceSqrt(1, 1)
+        });
         voter.createGauge({_poolFactory: address(poolFactory), _pool: address(pool2)});
 
         vm.startPrank(users.charlie);
-        INonfungiblePositionManager.MintParams memory params =
-            INonfungiblePositionManager.MintParams({
-                token0: address(token0),
-                token1: address(token1),
-                tickSpacing: TICK_SPACING_10,
-                tickLower: getMinTick(TICK_SPACING_10),
-                tickUpper: getMaxTick(TICK_SPACING_10),
-                recipient: users.charlie,
-                amount0Desired: TOKEN_1,
-                amount1Desired: TOKEN_1,
-                amount0Min: 0,
-                amount1Min: 0,
-                deadline: 10,
-                sqrtPriceX96: 0
-            });
+        INonfungiblePositionManager.MintParams memory params = INonfungiblePositionManager.MintParams({
+            token0: address(token0),
+            token1: address(token1),
+            tickSpacing: TICK_SPACING_10,
+            tickLower: getMinTick(TICK_SPACING_10),
+            tickUpper: getMaxTick(TICK_SPACING_10),
+            recipient: users.charlie,
+            amount0Desired: TOKEN_1,
+            amount1Desired: TOKEN_1,
+            amount0Min: 0,
+            amount1Min: 0,
+            deadline: 10,
+            sqrtPriceX96: 0
+        });
         (uint256 tokenId, , , ) = nft.mint(params);
 
         nft.approve(address(gauge), tokenId);
@@ -156,21 +150,20 @@ contract DepositTest is CLGaugeTest {
     }
 
     function test_DepositWithPositionInCurrentPrice() public {
-        INonfungiblePositionManager.MintParams memory params =
-            INonfungiblePositionManager.MintParams({
-                token0: address(token0),
-                token1: address(token1),
-                tickSpacing: TICK_SPACING_60,
-                tickLower: -TICK_SPACING_60,
-                tickUpper: TICK_SPACING_60,
-                recipient: users.alice,
-                amount0Desired: TOKEN_1,
-                amount1Desired: TOKEN_1,
-                amount0Min: 0,
-                amount1Min: 0,
-                deadline: 10,
-                sqrtPriceX96: 0
-            });
+        INonfungiblePositionManager.MintParams memory params = INonfungiblePositionManager.MintParams({
+            token0: address(token0),
+            token1: address(token1),
+            tickSpacing: TICK_SPACING_60,
+            tickLower: -TICK_SPACING_60,
+            tickUpper: TICK_SPACING_60,
+            recipient: users.alice,
+            amount0Desired: TOKEN_1,
+            amount1Desired: TOKEN_1,
+            amount0Min: 0,
+            amount1Min: 0,
+            deadline: 10,
+            sqrtPriceX96: 0
+        });
         (uint256 tokenId, uint128 liquidity, , ) = nft.mint(params);
 
         nft.approve(address(gauge), tokenId);
@@ -196,31 +189,32 @@ contract DepositTest is CLGaugeTest {
         assertEq(gauge.rewards(tokenId), 0);
         assertEq(gauge.lastUpdateTime(tokenId), 1);
 
-        (uint128 gaugeLiquidity, , , , ) =
-            pool.positions(keccak256(abi.encodePacked(address(gauge), -TICK_SPACING_60, TICK_SPACING_60)));
+        (uint128 gaugeLiquidity, , , , ) = pool.positions(
+            keccak256(abi.encodePacked(address(gauge), -TICK_SPACING_60, TICK_SPACING_60))
+        );
         assertEqUint(gaugeLiquidity, liquidity);
 
-        (uint128 nftLiquidity, , , , ) =
-            pool.positions(keccak256(abi.encodePacked(address(nft), -TICK_SPACING_60, TICK_SPACING_60)));
+        (uint128 nftLiquidity, , , , ) = pool.positions(
+            keccak256(abi.encodePacked(address(nft), -TICK_SPACING_60, TICK_SPACING_60))
+        );
         assertEqUint(nftLiquidity, 0);
     }
 
     function test_DepositWithPositionRightOfCurrentPrice() public {
-        INonfungiblePositionManager.MintParams memory params =
-            INonfungiblePositionManager.MintParams({
-                token0: address(token0),
-                token1: address(token1),
-                tickSpacing: TICK_SPACING_60,
-                tickLower: TICK_SPACING_60,
-                tickUpper: 2 * TICK_SPACING_60,
-                recipient: users.alice,
-                amount0Desired: TOKEN_1,
-                amount1Desired: TOKEN_1,
-                amount0Min: 0,
-                amount1Min: 0,
-                deadline: 10,
-                sqrtPriceX96: 0
-            });
+        INonfungiblePositionManager.MintParams memory params = INonfungiblePositionManager.MintParams({
+            token0: address(token0),
+            token1: address(token1),
+            tickSpacing: TICK_SPACING_60,
+            tickLower: TICK_SPACING_60,
+            tickUpper: 2 * TICK_SPACING_60,
+            recipient: users.alice,
+            amount0Desired: TOKEN_1,
+            amount1Desired: TOKEN_1,
+            amount0Min: 0,
+            amount1Min: 0,
+            deadline: 10,
+            sqrtPriceX96: 0
+        });
         (uint256 tokenId, uint128 liquidity, , ) = nft.mint(params);
 
         nft.approve(address(gauge), tokenId);
@@ -246,31 +240,32 @@ contract DepositTest is CLGaugeTest {
         assertEq(gauge.rewards(tokenId), 0);
         assertEq(gauge.lastUpdateTime(tokenId), 1);
 
-        (uint128 gaugeLiquidity, , , , ) =
-            pool.positions(keccak256(abi.encodePacked(address(gauge), TICK_SPACING_60, 2 * TICK_SPACING_60)));
+        (uint128 gaugeLiquidity, , , , ) = pool.positions(
+            keccak256(abi.encodePacked(address(gauge), TICK_SPACING_60, 2 * TICK_SPACING_60))
+        );
         assertEqUint(gaugeLiquidity, liquidity);
 
-        (uint128 nftLiquidity, , , , ) =
-            pool.positions(keccak256(abi.encodePacked(address(nft), TICK_SPACING_60, 2 * TICK_SPACING_60)));
+        (uint128 nftLiquidity, , , , ) = pool.positions(
+            keccak256(abi.encodePacked(address(nft), TICK_SPACING_60, 2 * TICK_SPACING_60))
+        );
         assertEqUint(nftLiquidity, 0);
     }
 
     function test_DepositWithPositionLeftOfCurrentPrice() public {
-        INonfungiblePositionManager.MintParams memory params =
-            INonfungiblePositionManager.MintParams({
-                token0: address(token0),
-                token1: address(token1),
-                tickSpacing: TICK_SPACING_60,
-                tickLower: -2 * TICK_SPACING_60,
-                tickUpper: -TICK_SPACING_60,
-                recipient: users.alice,
-                amount0Desired: TOKEN_1,
-                amount1Desired: TOKEN_1,
-                amount0Min: 0,
-                amount1Min: 0,
-                deadline: 10,
-                sqrtPriceX96: 0
-            });
+        INonfungiblePositionManager.MintParams memory params = INonfungiblePositionManager.MintParams({
+            token0: address(token0),
+            token1: address(token1),
+            tickSpacing: TICK_SPACING_60,
+            tickLower: -2 * TICK_SPACING_60,
+            tickUpper: -TICK_SPACING_60,
+            recipient: users.alice,
+            amount0Desired: TOKEN_1,
+            amount1Desired: TOKEN_1,
+            amount0Min: 0,
+            amount1Min: 0,
+            deadline: 10,
+            sqrtPriceX96: 0
+        });
         (uint256 tokenId, uint128 liquidity, , ) = nft.mint(params);
 
         nft.approve(address(gauge), tokenId);
@@ -296,18 +291,23 @@ contract DepositTest is CLGaugeTest {
         assertEq(gauge.rewards(tokenId), 0);
         assertEq(gauge.lastUpdateTime(tokenId), 1);
 
-        (uint128 gaugeLiquidity, , , , ) =
-            pool.positions(keccak256(abi.encodePacked(address(gauge), -2 * TICK_SPACING_60, -TICK_SPACING_60)));
+        (uint128 gaugeLiquidity, , , , ) = pool.positions(
+            keccak256(abi.encodePacked(address(gauge), -2 * TICK_SPACING_60, -TICK_SPACING_60))
+        );
         assertEqUint(gaugeLiquidity, liquidity);
 
-        (uint128 nftLiquidity, , , , ) =
-            pool.positions(keccak256(abi.encodePacked(address(nft), -2 * TICK_SPACING_60, -TICK_SPACING_60)));
+        (uint128 nftLiquidity, , , , ) = pool.positions(
+            keccak256(abi.encodePacked(address(nft), -2 * TICK_SPACING_60, -TICK_SPACING_60))
+        );
         assertEqUint(nftLiquidity, 0);
     }
 
     function test_DepositCollectsAlreadyAccumulatedFees() public {
-        uint256 tokenId =
-            nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(TOKEN_1 * 10, TOKEN_1 * 10, users.alice);
+        uint256 tokenId = nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(
+            TOKEN_1 * 10,
+            TOKEN_1 * 10,
+            users.alice
+        );
 
         // swap 1 token0
         clCallee.swapExact0For1(address(pool), 1e18, users.alice, MIN_SQRT_RATIO + 1);
@@ -327,16 +327,14 @@ contract DepositTest is CLGaugeTest {
         assertApproxEqAbs(aliceBalanceAfter0 - aliceBalanceBefore0, 3e15, 1);
         assertApproxEqAbs(aliceBalanceAfter1 - aliceBalanceBefore1, 3e15, 1);
 
-        (uint128 gaugeLiquidity, , , , ) =
-            pool.positions(
-                keccak256(abi.encodePacked(address(gauge), getMinTick(TICK_SPACING_60), getMaxTick(TICK_SPACING_60)))
-            );
+        (uint128 gaugeLiquidity, , , , ) = pool.positions(
+            keccak256(abi.encodePacked(address(gauge), getMinTick(TICK_SPACING_60), getMaxTick(TICK_SPACING_60)))
+        );
         assertEqUint(gaugeLiquidity, TOKEN_1 * 10);
 
-        (uint128 nftLiquidity, , , , ) =
-            pool.positions(
-                keccak256(abi.encodePacked(address(nft), getMinTick(TICK_SPACING_60), getMaxTick(TICK_SPACING_60)))
-            );
+        (uint128 nftLiquidity, , , , ) = pool.positions(
+            keccak256(abi.encodePacked(address(nft), getMinTick(TICK_SPACING_60), getMaxTick(TICK_SPACING_60)))
+        );
         assertEqUint(nftLiquidity, 0);
     }
 }

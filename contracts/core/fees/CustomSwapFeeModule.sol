@@ -33,6 +33,11 @@ contract CustomSwapFeeModule is ICustomFeeModule {
     function getFee(address pool) external view override returns (uint24) {
         uint24 fee = customFee[pool];
         int24 tickSpacing = ICLPool(pool).tickSpacing();
-        return fee == ZERO_FEE_INDICATOR ? 0 : fee != 0 ? fee : factory.tickSpacingToFee(tickSpacing);
+        return
+            fee == ZERO_FEE_INDICATOR
+                ? 0
+                : fee != 0
+                    ? fee
+                    : factory.tickSpacingToFee(tickSpacing);
     }
 }

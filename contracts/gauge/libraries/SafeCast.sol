@@ -8,7 +8,7 @@ library SafeCast {
     /// @param y The uint128 to be cast
     /// @return z The cast integer, now type int128
     function toInt128(uint128 y) internal pure returns (int128 z) {
-        require(y < 2**127);
+        require(y < 2 ** 127);
         z = int128(y);
     }
 }

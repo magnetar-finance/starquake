@@ -60,45 +60,53 @@ contract NonfungibleTokenPositionDescriptor is INonfungibleTokenPositionDescript
     }
 
     /// @inheritdoc INonfungibleTokenPositionDescriptor
-    function tokenURI(INonfungiblePositionManager positionManager, uint256 tokenId)
-        external
-        view
-        override
-        returns (string memory)
-    {
-        (, , address token0, address token1, int24 tickSpacing, int24 tickLower, int24 tickUpper, , , , , ) =
-            positionManager.positions(tokenId);
+    function tokenURI(
+        INonfungiblePositionManager positionManager,
+        uint256 tokenId
+    ) external view override returns (string memory) {
+        (
+            ,
+            ,
+            address token0,
+            address token1,
+            int24 tickSpacing,
+            int24 tickLower,
+            int24 tickUpper,
+            ,
+            ,
+            ,
+            ,
 
-        ICLPool pool =
-            ICLPool(
-                PoolAddress.computeAddress(
-                    positionManager.factory(),
-                    PoolAddress.PoolKey({token0: token0, token1: token1, tickSpacing: tickSpacing})
-                )
-            );
+        ) = positionManager.positions(tokenId);
+
+        ICLPool pool = ICLPool(
+            PoolAddress.computeAddress(
+                positionManager.factory(),
+                PoolAddress.PoolKey({token0: token0, token1: token1, tickSpacing: tickSpacing})
+            )
+        );
 
         bool _flipRatio = flipRatio(token0, token1, ChainId.get());
         address quoteTokenAddress = !_flipRatio ? token1 : token0;
         address baseTokenAddress = !_flipRatio ? token0 : token1;
-        NFTDescriptor.ConstructTokenURIParams memory params =
-            NFTDescriptor.ConstructTokenURIParams({
-                tokenId: tokenId,
-                quoteTokenAddress: quoteTokenAddress,
-                baseTokenAddress: baseTokenAddress,
-                quoteTokenSymbol: quoteTokenAddress == WETH9
-                    ? nativeCurrencyLabel()
-                    : SafeERC20Namer.tokenSymbol(quoteTokenAddress),
-                baseTokenSymbol: baseTokenAddress == WETH9
-                    ? nativeCurrencyLabel()
-                    : SafeERC20Namer.tokenSymbol(baseTokenAddress),
-                quoteTokenDecimals: IERC20Metadata(quoteTokenAddress).decimals(),
-                baseTokenDecimals: IERC20Metadata(baseTokenAddress).decimals(),
-                flipRatio: _flipRatio,
-                tickLower: tickLower,
-                tickUpper: tickUpper,
-                tickSpacing: tickSpacing,
-                poolAddress: address(pool)
-            });
+        NFTDescriptor.ConstructTokenURIParams memory params = NFTDescriptor.ConstructTokenURIParams({
+            tokenId: tokenId,
+            quoteTokenAddress: quoteTokenAddress,
+            baseTokenAddress: baseTokenAddress,
+            quoteTokenSymbol: quoteTokenAddress == WETH9
+                ? nativeCurrencyLabel()
+                : SafeERC20Namer.tokenSymbol(quoteTokenAddress),
+            baseTokenSymbol: baseTokenAddress == WETH9
+                ? nativeCurrencyLabel()
+                : SafeERC20Namer.tokenSymbol(baseTokenAddress),
+            quoteTokenDecimals: IERC20Metadata(quoteTokenAddress).decimals(),
+            baseTokenDecimals: IERC20Metadata(baseTokenAddress).decimals(),
+            flipRatio: _flipRatio,
+            tickLower: tickLower,
+            tickUpper: tickUpper,
+            tickSpacing: tickSpacing,
+            poolAddress: address(pool)
+        });
 
         string memory image = Base64.encode(bytes(generateSVG(positionManager, params)));
 
@@ -128,8 +136,11 @@ contract NonfungibleTokenPositionDescriptor is INonfungibleTokenPositionDescript
         INonfungiblePositionManager positionManager,
         NFTDescriptor.ConstructTokenURIParams memory params
     ) internal view returns (string memory) {
-        (uint256 quoteTokensOwed, uint256 baseTokensOwed) =
-            tokensOwed({positionManager: positionManager, tokenId: params.tokenId, _flipRatio: params.flipRatio});
+        (uint256 quoteTokensOwed, uint256 baseTokensOwed) = tokensOwed({
+            positionManager: positionManager,
+            tokenId: params.tokenId,
+            _flipRatio: params.flipRatio
+        });
         return
             NFTSVG.generateSVG({
                 quoteTokenSymbol: params.quoteTokenSymbol,
@@ -155,11 +166,7 @@ contract NonfungibleTokenPositionDescriptor is INonfungibleTokenPositionDescript
         baseTokensOwed = _flipRatio ? tokensOwed0 : tokensOwed1;
     }
 
-    function flipRatio(
-        address token0,
-        address token1,
-        uint256 chainId
-    ) public view returns (bool) {
+    function flipRatio(address token0, address token1, uint256 chainId) public view returns (bool) {
         return tokenRatioPriority(token0, chainId) > tokenRatioPriority(token1, chainId);
     }
 

@@ -33,21 +33,20 @@ contract WithdrawTest is CLGaugeTest {
     }
 
     function test_RevertIf_CallerIsNotOwner() public {
-        INonfungiblePositionManager.MintParams memory params =
-            INonfungiblePositionManager.MintParams({
-                token0: address(token0),
-                token1: address(token1),
-                tickSpacing: TICK_SPACING_60,
-                tickLower: getMinTick(TICK_SPACING_60),
-                tickUpper: getMaxTick(TICK_SPACING_60),
-                recipient: users.alice,
-                amount0Desired: TOKEN_1,
-                amount1Desired: TOKEN_1,
-                amount0Min: 0,
-                amount1Min: 0,
-                deadline: 10,
-                sqrtPriceX96: 0
-            });
+        INonfungiblePositionManager.MintParams memory params = INonfungiblePositionManager.MintParams({
+            token0: address(token0),
+            token1: address(token1),
+            tickSpacing: TICK_SPACING_60,
+            tickLower: getMinTick(TICK_SPACING_60),
+            tickUpper: getMaxTick(TICK_SPACING_60),
+            recipient: users.alice,
+            amount0Desired: TOKEN_1,
+            amount1Desired: TOKEN_1,
+            amount0Min: 0,
+            amount1Min: 0,
+            deadline: 10,
+            sqrtPriceX96: 0
+        });
         (uint256 tokenId, , , ) = nft.mint(params);
 
         nft.approve(address(gauge), tokenId);
@@ -59,27 +58,27 @@ contract WithdrawTest is CLGaugeTest {
     }
 
     function test_WithdrawWithPositionInCurrentPrice() public {
-        INonfungiblePositionManager.MintParams memory params =
-            INonfungiblePositionManager.MintParams({
-                token0: address(token0),
-                token1: address(token1),
-                tickSpacing: TICK_SPACING_60,
-                tickLower: -TICK_SPACING_60,
-                tickUpper: TICK_SPACING_60,
-                recipient: users.alice,
-                amount0Desired: TOKEN_1,
-                amount1Desired: TOKEN_1,
-                amount0Min: 0,
-                amount1Min: 0,
-                deadline: 10,
-                sqrtPriceX96: 0
-            });
+        INonfungiblePositionManager.MintParams memory params = INonfungiblePositionManager.MintParams({
+            token0: address(token0),
+            token1: address(token1),
+            tickSpacing: TICK_SPACING_60,
+            tickLower: -TICK_SPACING_60,
+            tickUpper: TICK_SPACING_60,
+            recipient: users.alice,
+            amount0Desired: TOKEN_1,
+            amount1Desired: TOKEN_1,
+            amount0Min: 0,
+            amount1Min: 0,
+            deadline: 10,
+            sqrtPriceX96: 0
+        });
         (uint256 tokenId, uint128 liquidity, , ) = nft.mint(params);
         nft.approve(address(gauge), tokenId);
         gauge.deposit({tokenId: tokenId});
 
-        (uint128 gaugeLiquidity, , , , ) =
-            pool.positions(keccak256(abi.encodePacked(address(gauge), -TICK_SPACING_60, TICK_SPACING_60)));
+        (uint128 gaugeLiquidity, , , , ) = pool.positions(
+            keccak256(abi.encodePacked(address(gauge), -TICK_SPACING_60, TICK_SPACING_60))
+        );
         assertEqUint(gaugeLiquidity, liquidity);
 
         vm.expectEmit(true, true, true, false, address(gauge));
@@ -103,8 +102,9 @@ contract WithdrawTest is CLGaugeTest {
         assertEq(gauge.rewards(tokenId), 0);
         assertEq(gauge.lastUpdateTime(tokenId), 1);
 
-        (uint128 nftLiquidity, , , , ) =
-            pool.positions(keccak256(abi.encodePacked(address(nft), -TICK_SPACING_60, TICK_SPACING_60)));
+        (uint128 nftLiquidity, , , , ) = pool.positions(
+            keccak256(abi.encodePacked(address(nft), -TICK_SPACING_60, TICK_SPACING_60))
+        );
         assertEqUint(nftLiquidity, liquidity);
 
         (gaugeLiquidity, , , , ) = pool.positions(
@@ -114,27 +114,27 @@ contract WithdrawTest is CLGaugeTest {
     }
 
     function test_WithdrawWithPositionRightOfCurrentPrice() public {
-        INonfungiblePositionManager.MintParams memory params =
-            INonfungiblePositionManager.MintParams({
-                token0: address(token0),
-                token1: address(token1),
-                tickSpacing: TICK_SPACING_60,
-                tickLower: TICK_SPACING_60,
-                tickUpper: 2 * TICK_SPACING_60,
-                recipient: users.alice,
-                amount0Desired: TOKEN_1,
-                amount1Desired: TOKEN_1,
-                amount0Min: 0,
-                amount1Min: 0,
-                deadline: 10,
-                sqrtPriceX96: 0
-            });
+        INonfungiblePositionManager.MintParams memory params = INonfungiblePositionManager.MintParams({
+            token0: address(token0),
+            token1: address(token1),
+            tickSpacing: TICK_SPACING_60,
+            tickLower: TICK_SPACING_60,
+            tickUpper: 2 * TICK_SPACING_60,
+            recipient: users.alice,
+            amount0Desired: TOKEN_1,
+            amount1Desired: TOKEN_1,
+            amount0Min: 0,
+            amount1Min: 0,
+            deadline: 10,
+            sqrtPriceX96: 0
+        });
         (uint256 tokenId, uint128 liquidity, , ) = nft.mint(params);
         nft.approve(address(gauge), tokenId);
         gauge.deposit({tokenId: tokenId});
 
-        (uint128 gaugeLiquidity, , , , ) =
-            pool.positions(keccak256(abi.encodePacked(address(gauge), TICK_SPACING_60, 2 * TICK_SPACING_60)));
+        (uint128 gaugeLiquidity, , , , ) = pool.positions(
+            keccak256(abi.encodePacked(address(gauge), TICK_SPACING_60, 2 * TICK_SPACING_60))
+        );
         assertEqUint(gaugeLiquidity, liquidity);
 
         vm.expectEmit(true, true, true, false, address(gauge));
@@ -158,8 +158,9 @@ contract WithdrawTest is CLGaugeTest {
         assertEq(gauge.rewards(tokenId), 0);
         assertEq(gauge.lastUpdateTime(tokenId), 1);
 
-        (uint128 nftLiquidity, , , , ) =
-            pool.positions(keccak256(abi.encodePacked(address(nft), TICK_SPACING_60, 2 * TICK_SPACING_60)));
+        (uint128 nftLiquidity, , , , ) = pool.positions(
+            keccak256(abi.encodePacked(address(nft), TICK_SPACING_60, 2 * TICK_SPACING_60))
+        );
         assertEqUint(nftLiquidity, liquidity);
 
         (gaugeLiquidity, , , , ) = pool.positions(
@@ -169,27 +170,27 @@ contract WithdrawTest is CLGaugeTest {
     }
 
     function test_WithdrawWithPositionLeftOfCurrentPrice() public {
-        INonfungiblePositionManager.MintParams memory params =
-            INonfungiblePositionManager.MintParams({
-                token0: address(token0),
-                token1: address(token1),
-                tickSpacing: TICK_SPACING_60,
-                tickLower: -2 * TICK_SPACING_60,
-                tickUpper: -TICK_SPACING_60,
-                recipient: users.alice,
-                amount0Desired: TOKEN_1,
-                amount1Desired: TOKEN_1,
-                amount0Min: 0,
-                amount1Min: 0,
-                deadline: 10,
-                sqrtPriceX96: 0
-            });
+        INonfungiblePositionManager.MintParams memory params = INonfungiblePositionManager.MintParams({
+            token0: address(token0),
+            token1: address(token1),
+            tickSpacing: TICK_SPACING_60,
+            tickLower: -2 * TICK_SPACING_60,
+            tickUpper: -TICK_SPACING_60,
+            recipient: users.alice,
+            amount0Desired: TOKEN_1,
+            amount1Desired: TOKEN_1,
+            amount0Min: 0,
+            amount1Min: 0,
+            deadline: 10,
+            sqrtPriceX96: 0
+        });
         (uint256 tokenId, uint128 liquidity, , ) = nft.mint(params);
         nft.approve(address(gauge), tokenId);
         gauge.deposit({tokenId: tokenId});
 
-        (uint128 gaugeLiquidity, , , , ) =
-            pool.positions(keccak256(abi.encodePacked(address(gauge), -2 * TICK_SPACING_60, -TICK_SPACING_60)));
+        (uint128 gaugeLiquidity, , , , ) = pool.positions(
+            keccak256(abi.encodePacked(address(gauge), -2 * TICK_SPACING_60, -TICK_SPACING_60))
+        );
         assertEqUint(gaugeLiquidity, liquidity);
 
         vm.expectEmit(true, true, true, false, address(gauge));
@@ -213,8 +214,9 @@ contract WithdrawTest is CLGaugeTest {
         assertEq(gauge.rewards(tokenId), 0);
         assertEq(gauge.lastUpdateTime(tokenId), 1);
 
-        (uint128 nftLiquidity, , , , ) =
-            pool.positions(keccak256(abi.encodePacked(address(nft), -2 * TICK_SPACING_60, -TICK_SPACING_60)));
+        (uint128 nftLiquidity, , , , ) = pool.positions(
+            keccak256(abi.encodePacked(address(nft), -2 * TICK_SPACING_60, -TICK_SPACING_60))
+        );
         assertEqUint(nftLiquidity, liquidity);
 
         (gaugeLiquidity, , , , ) = pool.positions(
@@ -225,21 +227,20 @@ contract WithdrawTest is CLGaugeTest {
 
     function test_WithdrawCollectsRewards() public {
         skipToNextEpoch(0);
-        INonfungiblePositionManager.MintParams memory params =
-            INonfungiblePositionManager.MintParams({
-                token0: address(token0),
-                token1: address(token1),
-                tickSpacing: TICK_SPACING_60,
-                tickLower: -TICK_SPACING_60,
-                tickUpper: TICK_SPACING_60,
-                recipient: users.alice,
-                amount0Desired: TOKEN_1,
-                amount1Desired: TOKEN_1,
-                amount0Min: 0,
-                amount1Min: 0,
-                deadline: block.timestamp,
-                sqrtPriceX96: 0
-            });
+        INonfungiblePositionManager.MintParams memory params = INonfungiblePositionManager.MintParams({
+            token0: address(token0),
+            token1: address(token1),
+            tickSpacing: TICK_SPACING_60,
+            tickLower: -TICK_SPACING_60,
+            tickUpper: TICK_SPACING_60,
+            recipient: users.alice,
+            amount0Desired: TOKEN_1,
+            amount1Desired: TOKEN_1,
+            amount0Min: 0,
+            amount1Min: 0,
+            deadline: block.timestamp,
+            sqrtPriceX96: 0
+        });
         (uint256 tokenId, uint128 liquidity, , ) = nft.mint(params);
         nft.approve(address(gauge), tokenId);
         gauge.deposit({tokenId: tokenId});
@@ -278,8 +279,11 @@ contract WithdrawTest is CLGaugeTest {
     }
 
     function test_WithdrawUpdatesPositionCorrectly() public {
-        uint256 tokenId =
-            nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(TOKEN_1 * 10, TOKEN_1 * 10, users.alice);
+        uint256 tokenId = nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(
+            TOKEN_1 * 10,
+            TOKEN_1 * 10,
+            users.alice
+        );
 
         nft.approve(address(gauge), tokenId);
         gauge.deposit(tokenId);
@@ -300,8 +304,8 @@ contract WithdrawTest is CLGaugeTest {
 
         (gp.liquidity, gp.feeGrowthInside0LastX128, gp.feeGrowthInside1LastX128, gp.tokensOwed0, gp.tokensOwed1) = pool
             .positions(
-            keccak256(abi.encodePacked(address(gauge), getMinTick(TICK_SPACING_60), getMaxTick(TICK_SPACING_60)))
-        );
+                keccak256(abi.encodePacked(address(gauge), getMinTick(TICK_SPACING_60), getMaxTick(TICK_SPACING_60)))
+            );
 
         assertEqUint(gp.liquidity, 0);
 
@@ -309,8 +313,8 @@ contract WithdrawTest is CLGaugeTest {
 
         (np.liquidity, np.feeGrowthInside0LastX128, np.feeGrowthInside1LastX128, np.tokensOwed0, np.tokensOwed1) = pool
             .positions(
-            keccak256(abi.encodePacked(address(nft), getMinTick(TICK_SPACING_60), getMaxTick(TICK_SPACING_60)))
-        );
+                keccak256(abi.encodePacked(address(nft), getMinTick(TICK_SPACING_60), getMaxTick(TICK_SPACING_60)))
+            );
 
         assertEqUint(np.liquidity, TOKEN_1 * 10);
 
@@ -343,8 +347,11 @@ contract WithdrawTest is CLGaugeTest {
     }
 
     function test_WithdrawUpdatesPositionCorrectlyWithUnstakedPositions() public {
-        uint256 tokenId =
-            nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(TOKEN_1 * 10, TOKEN_1 * 10, users.alice);
+        uint256 tokenId = nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(
+            TOKEN_1 * 10,
+            TOKEN_1 * 10,
+            users.alice
+        );
 
         nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(TOKEN_1 * 10, TOKEN_1 * 10, users.alice);
 
@@ -367,8 +374,7 @@ contract WithdrawTest is CLGaugeTest {
             uint256 feeGrowthInside1LastX128,
             uint128 tokensOwed0,
             uint128 tokensOwed1
-        ) =
-            pool.positions(
+        ) = pool.positions(
                 keccak256(abi.encodePacked(address(nft), getMinTick(TICK_SPACING_60), getMaxTick(TICK_SPACING_60)))
             );
         {
@@ -398,11 +404,17 @@ contract WithdrawTest is CLGaugeTest {
     }
 
     function test_WithdrawUpdatesPositionCorrectlyWithStakedAndUnstakedButStakedTriggersUpdate() public {
-        uint256 tokenId =
-            nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(TOKEN_1 * 10, TOKEN_1 * 10, users.alice);
+        uint256 tokenId = nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(
+            TOKEN_1 * 10,
+            TOKEN_1 * 10,
+            users.alice
+        );
 
-        uint256 tokenId2 =
-            nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(TOKEN_1 * 10, TOKEN_1 * 10, users.alice);
+        uint256 tokenId2 = nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(
+            TOKEN_1 * 10,
+            TOKEN_1 * 10,
+            users.alice
+        );
 
         // two identical nfts, deposit one of them
         nft.approve(address(gauge), tokenId);
@@ -429,8 +441,7 @@ contract WithdrawTest is CLGaugeTest {
             uint256 feeGrowthInside1LastX128Gauge,
             uint128 tokensOwed0Gauge,
             uint128 tokensOwed1Gauge
-        ) =
-            pool.positions(
+        ) = pool.positions(
                 keccak256(abi.encodePacked(address(gauge), getMinTick(TICK_SPACING_60), getMaxTick(TICK_SPACING_60)))
             );
 
@@ -473,8 +484,7 @@ contract WithdrawTest is CLGaugeTest {
             uint256 feeGrowthInside1LastX128Nft,
             uint128 tokensOwed0Nft,
             uint128 tokensOwed1Nft
-        ) =
-            pool.positions(
+        ) = pool.positions(
                 keccak256(abi.encodePacked(address(nft), getMinTick(TICK_SPACING_60), getMaxTick(TICK_SPACING_60)))
             );
         // check tokenId2
@@ -508,11 +518,17 @@ contract WithdrawTest is CLGaugeTest {
     }
 
     function test_WithdrawUpdatesPositionCorrectlyWithStakedAndUnstakedButUnstakedTriggersUpdate() public {
-        uint256 tokenId =
-            nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(TOKEN_1 * 10, TOKEN_1 * 10, users.alice);
+        uint256 tokenId = nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(
+            TOKEN_1 * 10,
+            TOKEN_1 * 10,
+            users.alice
+        );
 
-        uint256 tokenId2 =
-            nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(TOKEN_1 * 10, TOKEN_1 * 10, users.alice);
+        uint256 tokenId2 = nftCallee.mintNewFullRangePositionForUserWith60TickSpacing(
+            TOKEN_1 * 10,
+            TOKEN_1 * 10,
+            users.alice
+        );
 
         // two identical nfts, deposit one of them
         nft.approve(address(gauge), tokenId);
@@ -543,8 +559,7 @@ contract WithdrawTest is CLGaugeTest {
             uint256 feeGrowthInside1LastX128Gauge,
             uint128 tokensOwed0Gauge,
             uint128 tokensOwed1Gauge
-        ) =
-            pool.positions(
+        ) = pool.positions(
                 keccak256(abi.encodePacked(address(gauge), getMinTick(TICK_SPACING_60), getMaxTick(TICK_SPACING_60)))
             );
 
@@ -581,8 +596,7 @@ contract WithdrawTest is CLGaugeTest {
             uint256 feeGrowthInside1LastX128Nft,
             uint128 tokensOwed0Nft,
             uint128 tokensOwed1Nft
-        ) =
-            pool.positions(
+        ) = pool.positions(
                 keccak256(abi.encodePacked(address(nft), getMinTick(TICK_SPACING_60), getMaxTick(TICK_SPACING_60)))
             );
         // check tokenId2

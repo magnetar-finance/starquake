@@ -17,14 +17,13 @@ contract SetCustomUnstakedFeeTest is CustomUnstakedFeeModuleTest {
     }
 
     function test_RevertIf_FeeTooHigh() public {
-        address pool =
-            createAndCheckPool({
-                factory: poolFactory,
-                token0: TEST_TOKEN_0,
-                token1: TEST_TOKEN_1,
-                tickSpacing: TICK_SPACING_LOW,
-                sqrtPriceX96: encodePriceSqrt(1, 1)
-            });
+        address pool = createAndCheckPool({
+            factory: poolFactory,
+            token0: TEST_TOKEN_0,
+            token1: TEST_TOKEN_1,
+            tickSpacing: TICK_SPACING_LOW,
+            sqrtPriceX96: encodePriceSqrt(1, 1)
+        });
 
         vm.expectRevert();
         customUnstakedFeeModule.setCustomFee({pool: pool, fee: 500_001});
@@ -36,14 +35,13 @@ contract SetCustomUnstakedFeeTest is CustomUnstakedFeeModuleTest {
     }
 
     function test_SetCustomFee() public {
-        address pool =
-            createAndCheckPool({
-                factory: poolFactory,
-                token0: TEST_TOKEN_0,
-                token1: TEST_TOKEN_1,
-                tickSpacing: TICK_SPACING_LOW,
-                sqrtPriceX96: encodePriceSqrt(1, 1)
-            });
+        address pool = createAndCheckPool({
+            factory: poolFactory,
+            token0: TEST_TOKEN_0,
+            token1: TEST_TOKEN_1,
+            tickSpacing: TICK_SPACING_LOW,
+            sqrtPriceX96: encodePriceSqrt(1, 1)
+        });
         voter.createGauge({_poolFactory: address(poolFactory), _pool: address(pool)});
 
         vm.expectEmit(true, true, false, false, address(customUnstakedFeeModule));
@@ -74,14 +72,13 @@ contract SetCustomUnstakedFeeTest is CustomUnstakedFeeModuleTest {
     }
 
     function test_CannotExceedMaxUnstakedFee() public {
-        address pool =
-            createAndCheckPool({
-                factory: poolFactory,
-                token0: TEST_TOKEN_0,
-                token1: TEST_TOKEN_1,
-                tickSpacing: TICK_SPACING_LOW,
-                sqrtPriceX96: encodePriceSqrt(1, 1)
-            });
+        address pool = createAndCheckPool({
+            factory: poolFactory,
+            token0: TEST_TOKEN_0,
+            token1: TEST_TOKEN_1,
+            tickSpacing: TICK_SPACING_LOW,
+            sqrtPriceX96: encodePriceSqrt(1, 1)
+        });
         voter.createGauge({_poolFactory: address(poolFactory), _pool: address(pool)});
         uint24 maxFee = 1_000_000;
         uint24 defaultFee = 100_000;

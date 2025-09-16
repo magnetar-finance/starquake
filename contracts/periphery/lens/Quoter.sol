@@ -26,28 +26,19 @@ contract Quoter is IQuoter, ICLSwapCallback, PeripheryImmutableState {
 
     constructor(address _factory, address _WETH9) PeripheryImmutableState(_factory, _WETH9) {}
 
-    function getPool(
-        address tokenA,
-        address tokenB,
-        int24 tickSpacing
-    ) private view returns (ICLPool) {
+    function getPool(address tokenA, address tokenB, int24 tickSpacing) private view returns (ICLPool) {
         return ICLPool(PoolAddress.computeAddress(factory, PoolAddress.getPoolKey(tokenA, tokenB, tickSpacing)));
     }
 
     /// @inheritdoc ICLSwapCallback
-    function uniswapV3SwapCallback(
-        int256 amount0Delta,
-        int256 amount1Delta,
-        bytes memory path
-    ) external view override {
+    function uniswapV3SwapCallback(int256 amount0Delta, int256 amount1Delta, bytes memory path) external view override {
         require(amount0Delta > 0 || amount1Delta > 0); // swaps entirely within 0-liquidity regions are not supported
         (address tokenIn, address tokenOut, int24 tickSpacing) = path.decodeFirstPool();
         CallbackValidation.verifyCallback(factory, tokenIn, tokenOut, tickSpacing);
 
-        (bool isExactInput, uint256 amountToPay, uint256 amountReceived) =
-            amount0Delta > 0
-                ? (tokenIn < tokenOut, uint256(amount0Delta), uint256(-amount1Delta))
-                : (tokenOut < tokenIn, uint256(amount1Delta), uint256(-amount0Delta));
+        (bool isExactInput, uint256 amountToPay, uint256 amountReceived) = amount0Delta > 0
+            ? (tokenIn < tokenOut, uint256(amount0Delta), uint256(-amount1Delta))
+            : (tokenOut < tokenIn, uint256(amount1Delta), uint256(-amount0Delta));
         if (isExactInput) {
             assembly {
                 let ptr := mload(0x40)
