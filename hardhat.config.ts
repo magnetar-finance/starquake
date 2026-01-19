@@ -33,6 +33,14 @@ export default {
       gas: 'auto',
       gasMultiplier: 1,
     },
+    zenchainTestnet: {
+      url: 'https://zenchain-testnet.api.onfinality.io/public',
+      chainId: 8408,
+      accounts: [process.env.PRIVATE_KEY],
+      gasPrice: 'auto',
+      gas: 'auto',
+      gasMultiplier: 1,
+    },
   },
   typechain: {
     target: 'ethers-v5',
