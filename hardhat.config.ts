@@ -49,6 +49,14 @@ export default {
       gas: 'auto',
       gasMultiplier: 1,
     },
+    pharosNetworkTestnet: {
+      url: 'https://atlantic.dplabs-internal.com',
+      chainId: 688689,
+      accounts: [process.env.PRIVATE_KEY],
+      gasPrice: 'auto',
+      gas: 'auto',
+      gasMultiplier: 1,
+    },
   },
   typechain: {
     target: 'ethers-v5',

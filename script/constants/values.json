@@ -122,5 +122,29 @@
     "tokenB": [],
     "tickSpacings": [1, 50, 100, 200, 2000],
     "sqrtPriceX96": [2.48, 2.48, 1.06382978723, 1.01214574899, 555.555555556, 3.17863954228]
+  },
+  "688689": {
+    "poolFactoryOwner": "0xb69DB7b7B3aD64d53126DCD1f4D5fBDaea4fF578",
+    "feeManager": "0xb69DB7b7B3aD64d53126DCD1f4D5fBDaea4fF578",
+    "notifyAdmin": "0xb69DB7b7B3aD64d53126DCD1f4D5fBDaea4fF578",
+    "FactoryRegistry": "0xF82DfAFfA7520DD0F32F099c82443F4dB0e53956",
+    "Voter": "0x6CB997EBBaA114434D7e374A6fDC077E85B5a4A4",
+    "WETH": "0x838800b758277CC111B2d48Ab01e5E164f8E9471",
+    "team": "0xb69DB7b7B3aD64d53126DCD1f4D5fBDaea4fF578",
+    "factoryV2": "0x68D81F61b88c2622A590719f956f5Dc253a1dC3d",
+    "nftName": "Starquake CL-POS",
+    "nftSymbol": "STARQUAKE-CL-POS",
+    "nftFungibleTokenPositionDescriptorTokens": {
+      "DAI": "0xb691f00682feef63bc73f41c380ff648d73c6a2c",
+      "USDC": "0xE0BE08c77f415F577A1B3A9aD7a1Df1479564ec8",
+      "USDT": "0xE7E84B8B4f39C507499c40B4ac199B050e2882d5",
+      "WBTC": "0x0c64F03EEa5c30946D5c55B4b532D08ad74638a4",
+      "ETH": "0x838800b758277CC111B2d48Ab01e5E164f8E9471"
+    },
+    "chainNameBytes": "0x506861726f73204e6574776f726b000000000000000000000000000000000000",
+    "tokenA": [],
+    "tokenB": [],
+    "tickSpacings": [1, 50, 100, 200, 2000],
+    "sqrtPriceX96": [2.48, 2.48, 1.06382978723, 1.01214574899, 555.555555556, 3.17863954228]
   }
 }
