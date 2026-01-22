@@ -41,6 +41,14 @@ export default {
       gas: 'auto',
       gasMultiplier: 1,
     },
+    duskEVMTestnet: {
+      url: 'https://rpc.testnet.evm.dusk.network',
+      chainId: 745,
+      accounts: [process.env.PRIVATE_KEY],
+      gasPrice: 'auto',
+      gas: 'auto',
+      gasMultiplier: 1,
+    },
   },
   typechain: {
     target: 'ethers-v5',
