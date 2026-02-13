@@ -116,6 +116,8 @@ async function main() {
     console.error(err.stack);
   }
 
+  await writeFile(outputFile, JSON.stringify(output, null, 2));
+
   try {
     if (!output.gaugeFactory) {
       const gaugeImplementation = await deploy<CLGauge>('CLGauge');
@@ -132,6 +134,8 @@ async function main() {
   } catch (err: any) {
     console.error(err.stack);
   }
+
+  await writeFile(outputFile, JSON.stringify(output, null, 2));
 
   try {
     if (!output.nftDescriptor) {
@@ -159,6 +163,8 @@ async function main() {
     console.error(err.stack);
   }
 
+  await writeFile(outputFile, JSON.stringify(output, null, 2));
+
   try {
     if (!output.nft) {
       nft = await deploy<NonfungiblePositionManager>(
@@ -179,6 +185,8 @@ async function main() {
     console.error(err.stack);
   }
 
+  await writeFile(outputFile, JSON.stringify(output, null, 2));
+
   try {
     await gaugeFactory!.setNonfungiblePositionManager(nft!.address);
   } catch (err: any) {
@@ -195,6 +203,8 @@ async function main() {
   } catch (err: any) {
     console.error(err.stack);
   }
+
+  await writeFile(outputFile, JSON.stringify(output, null, 2));
 
   try {
     if (!output.unstakedFeeModule) {
@@ -214,12 +224,16 @@ async function main() {
     console.error(err.stack);
   }
 
+  await writeFile(outputFile, JSON.stringify(output, null, 2));
+
   try {
     const router = await deploy<SwapRouter>('SwapRouter', undefined, poolFactory!.address, CONSTANTS.WETH);
     output.swapRouter = router.address;
   } catch (err: any) {
     console.error(err.stack);
   }
+
+  await writeFile(outputFile, JSON.stringify(output, null, 2));
 
   // permissions
   try {
@@ -262,6 +276,8 @@ async function main() {
   } catch (err: any) {
     console.error(err.stack);
   }
+
+  await writeFile(outputFile, JSON.stringify(output, null, 2));
 
   try {
     if (!output.quoter) {

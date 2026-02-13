@@ -57,6 +57,14 @@ export default {
       gas: 'auto',
       gasMultiplier: 1,
     },
+    seismicTestnet: {
+      url: 'https://gcp-2.seismictest.net/rpc',
+      chainId: 5124,
+      accounts: [process.env.PRIVATE_KEY],
+      gasPrice: 'auto',
+      gas: 'auto',
+      gasMultiplier: 1,
+    },
   },
   typechain: {
     target: 'ethers-v5',
