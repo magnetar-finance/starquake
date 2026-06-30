@@ -81,6 +81,14 @@ export default {
       gas: 'auto',
       gasMultiplier: 1,
     },
+    neuraTestnet: {
+      url: 'https://testnet.rpc.neuraprotocol.io/',
+      chainId: 267,
+      accounts: [process.env.PRIVATE_KEY],
+      gasPrice: 'auto',
+      gas: 'auto',
+      gasMultiplier: 1,
+    },
   },
   typechain: {
     target: 'ethers-v5',
